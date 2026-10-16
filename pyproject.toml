@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-product-recommendation-agent"
+version = "0.1.0"
+description = "RAG-Based Intelligent Product Recommendation Agent: hard-constraint filtering, FAISS semantic retrieval, and grounded explanations."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "faiss-cpu",
+    "numpy",
+    "sentence-transformers",
+    "pydantic",
+    "pydantic-settings",
+    "fastapi",
+    "uvicorn",
+    "streamlit",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: tests needing a real embedding model or local LLM"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
