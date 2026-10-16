@@ -115,3 +115,43 @@ class EvidenceRecord(BaseModel):
     field: EvidenceField
     value: int | float | bool | str | list[str] | None
     allowed_reason_codes: tuple[ReasonCode, ...]
+
+
+class PlanReason(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    code: ReasonCode
+    evidence_id: str = Field(min_length=1, max_length=64)
+
+
+class PlanRecommendation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    product_id: str = Field(pattern=r"^P[0-9]{3,}$")
+    reasons: list[PlanReason] = Field(max_length=2)
+    unknown_fields: list[UnknownableField] = Field(default_factory=list, max_length=4)
+
+
+class ExplanationPlan(BaseModel):
+    """What the LLM may produce: evidence selections and reason codes, never free prose."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    recommendations: list[PlanRecommendation] = Field(max_length=3)
+
+
+class RecommendationItem(BaseModel):
+    """One user-visible recommendation. Every value comes from the canonical catalog."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    product_id: str
+    title: str
+    price_cents: int
+    currency: str
+    in_stock: bool
+    source_url: str
+    attributes: dict[str, int | float | str | list[str] | None]
+    reasons: list[str]
+    evidence_refs: list[str]
+    unknown_fields: list[str]
