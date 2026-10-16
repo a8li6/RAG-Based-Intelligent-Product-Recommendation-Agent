@@ -88,3 +88,30 @@ class Filters(BaseModel):
     min_ram_gb: int | None = Field(default=None, strict=True, ge=1, le=MAX_RAM_GB)
     max_weight_kg: float | None = Field(default=None, gt=0, le=MAX_WEIGHT_KG, allow_inf_nan=False)
     require_in_stock: bool | None = None
+
+
+ReasonCode = Literal[
+    "meets_budget",
+    "meets_ram_minimum",
+    "meets_weight_limit",
+    "in_stock",
+    "use_case_match",
+    "catalog_fact",
+]
+EvidenceField = Literal[
+    "price_cents", "ram_gb", "storage_gb", "weight_kg", "gpu_type", "in_stock", "use_cases"
+]
+# Specs that may legitimately be unknown (None) in the catalog.
+UnknownableField = Literal["ram_gb", "storage_gb", "weight_kg", "gpu_type"]
+
+
+class EvidenceRecord(BaseModel):
+    """Immutable fact from the canonical catalog that a reason may cite."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    evidence_id: str
+    product_id: str
+    field: EvidenceField
+    value: int | float | bool | str | list[str] | None
+    allowed_reason_codes: tuple[ReasonCode, ...]
