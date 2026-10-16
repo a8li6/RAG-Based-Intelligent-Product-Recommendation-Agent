@@ -76,3 +76,15 @@ class Constraints(BaseModel):
     min_ram_gb: int | None = Field(default=None, strict=True, ge=1)
     max_weight_kg: float | None = Field(default=None, gt=0, allow_inf_nan=False)
     require_in_stock: bool = True
+
+
+class Filters(BaseModel):
+    """Structured UI/API controls. When supplied they are authoritative for their field."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    max_price_cents: int | None = Field(default=None, strict=True, ge=0, le=MAX_PRICE_CENTS)
+    currency: Literal["USD"] | None = None
+    min_ram_gb: int | None = Field(default=None, strict=True, ge=1, le=MAX_RAM_GB)
+    max_weight_kg: float | None = Field(default=None, gt=0, le=MAX_WEIGHT_KG, allow_inf_nan=False)
+    require_in_stock: bool | None = None
