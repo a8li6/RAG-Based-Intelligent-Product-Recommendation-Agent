@@ -22,7 +22,37 @@
 - Heavy dependencies (faiss-cpu, sentence-transformers) are listed in
   `pyproject.toml` but not yet installed or pinned; `requirements-lock.txt` is
   deferred until the M2 embedding pilot passes.
-- No LICENSE file yet: the license choice is pending.
+- LICENSE (MIT) and DATA_LICENSE.md added after session 1's M1 commits.
 - Ollama is not available in the cloud session; local-LLM checks are deferred.
 
-**Next:** M2 - embeddings adapter, FAISS index with manifest, eligible-subset retrieval.
+
+## Session 2 - M2 (embeddings and retrieval)
+
+**Completed**
+- `config.py`: validated settings; paths resolve from the project root.
+- `embeddings.py`: E5 adapter (passage/query prefixes, normalization, lazy model load)
+  and `validate_vectors` (2D, float32, finite, non-zero, unit-norm).
+- `index.py`: atomic artifact build (`products.faiss`, `embeddings.npy`,
+  `product_ids.json`, `catalog.jsonl`, `manifest.json` with per-file checksums);
+  loading rejects missing files, checksum mismatch, shuffled ID mapping (including
+  a rewritten checksum), index/vector disagreement and embedder mismatch.
+- `retrieval.py`: exact search over the eligible subset only. A test proves the
+  only eligible product ranked below the global top-10 is still returned.
+- CLI: `build-index` and `search` (embedder injectable for tests).
+- 117 unit tests passing (`-m "not slow"`); Ruff clean.
+
+**Not yet verified (real model)**
+- The real `intfloat/multilingual-e5-small` model has **not** been run. The cloud
+  environment's network policy blocks `huggingface.co`, so every M2 test uses a
+  deterministic hash embedder. Consequences:
+  - the M0 embedding pilot (10 records, peak memory, timing) is still open;
+  - `EMBEDDING_REVISION` is still `main`; it must be resolved to an immutable
+    commit hash before any benchmark or release;
+  - `requirements-lock.txt` is not created; `sentence-transformers` is not installed;
+  - semantic quality of the real encoder is unmeasured. The test embedder only
+    proves plumbing, not relevance.
+- A `slow`-marked test (`test_real_e5_model_roundtrip`) is ready for a machine
+  with model access: `python -m pytest -m slow`.
+
+**Next:** M3 - query parsing and follow-up rules, ranking and evidence, LLM adapter,
+grounding validation, deterministic fallback, shared service.
