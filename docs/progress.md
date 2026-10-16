@@ -103,3 +103,40 @@ price because of the substring "more than". Fixed for price and weight, with reg
 
 **Next:** M4 - FastAPI (`/health`, `/ready`, `/recommendations`), Streamlit UI, API tests
 with `TestClient`.
+
+## Audit after M3 and gap closure (session 3)
+
+An audit against the design guide found M0-M3 code complete but M4 (API and UI) not started,
+plus several small M0/M1 gaps. The gaps that do not need network access are now closed.
+
+**Closed**
+- `tests/fixtures/`: invalid-catalog and hostile-product fixtures, with tests that assert every
+  error is reported with its line and that injection text stays inert end to end.
+- Validation report: `validate-data --report` (counts, catalog hash, missing-field counts,
+  transformation rules, size and SHA-256 of the untouched source) and `--canonical-out`
+  (deterministic snapshot). Outputs can never be the input file; nothing is written on failure.
+- Build timing (`embed_seconds`, `build_seconds`) and `revision_pinned` recorded in the manifest;
+  `build-index` warns when the embedding revision is not an immutable commit hash.
+- Document token-length check using the model tokenizer (passage prefix included). Overlong
+  documents are rejected before embedding, never truncated; token statistics go in the manifest.
+- 345 tests passing (1 slow test skipped); Ruff clean.
+
+**Still open - blocked by the cloud environment's network policy**
+- Run the real `intfloat/multilingual-e5-small` model (`huggingface.co` is not reachable):
+  the 10-record embedding pilot, peak memory and timing, and resolving `EMBEDDING_REVISION`
+  from `main` to a commit hash.
+- `requirements-lock.txt` (needs the full dependency set installed and verified, including the
+  real model path) and the clean-environment install check that depends on it.
+- Run the real local LLM (Ollama is not available): confirm `think: false` and JSON-schema
+  `format` support, record the model digest and Ollama version, measure latency and quality.
+- The token-length check is verified only with a stand-in tokenizer; the real tokenizer path
+  (`E5Embedder.count_tokens`) is untested until the model can be loaded.
+
+**Not started**
+- M4: `api.py`, `ui/app.py`, API tests with `TestClient`.
+- M5: reviewed 40-100 record catalog, 60-query evaluation set, `evaluate` command, metrics.
+- M6: CI workflow, `docs/architecture.md`, `docs/evaluation.md`, full README, release.
+
+**Note for M5:** with the 8-product fixture, Recall@10 is trivial. M5 first needs the larger
+reviewed catalog. Retrieval-quality numbers computed with the hash test embedder are not
+meaningful; they only validate the evaluation tooling until the real model can run.
