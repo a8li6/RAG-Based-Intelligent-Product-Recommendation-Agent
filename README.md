@@ -17,10 +17,10 @@ produces grounded, evidence-backed explanations.
 
 | Milestone | Focus |
 |---|---|
-| M0 | Scope and environment |
-| M1 | Catalog schema, validation, eligibility filters |
-| M2 | Embeddings and FAISS retrieval |
-| M3 | Query parsing, LLM adapter, grounding |
+| M0 | Scope and environment - done |
+| M1 | Catalog schema, validation, eligibility filters - done |
+| M2 | Embeddings and FAISS retrieval - done (tested with a fake embedder; real model pending) |
+| M3 | Query parsing, LLM adapter, grounding - done (tested with a mocked LLM; real model pending) |
 | M4 | FastAPI and Streamlit |
 | M5 | Evaluation and hardening |
 | M6 | CI, documentation, release |
