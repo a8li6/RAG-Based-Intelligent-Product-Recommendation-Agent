@@ -34,3 +34,11 @@ class HashEmbedder:
 @pytest.fixture
 def embedder():
     return HashEmbedder()
+
+
+@pytest.fixture
+def settings(monkeypatch):
+    from recommender.config import Settings, load_settings
+
+    monkeypatch.setitem(Settings.model_config, "env_file", None)
+    return load_settings()

@@ -155,3 +155,52 @@ class RecommendationItem(BaseModel):
     reasons: list[str]
     evidence_refs: list[str]
     unknown_fields: list[str]
+
+
+ResponseStatus = Literal["ok", "no_match", "needs_clarification"]
+ExplanationMode = Literal["llm", "deterministic"]
+
+
+class RecommendationRequest(BaseModel):
+    """One validated request. The first API is stateless: filters are sent explicitly."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    query: str = Field(min_length=1, max_length=2000)
+    filters: Filters | None = None
+    requested_count: int = Field(default=3, strict=True, ge=1, le=3)
+
+    @field_validator("query", mode="after")
+    @classmethod
+    def _not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("query must not be blank")
+        return value
+
+
+class ActiveFilters(BaseModel):
+    """Filters as interpreted for this request, shown to the user."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    semantic_query: str
+    max_price_cents: int | None
+    currency: Literal["USD"]
+    min_ram_gb: int | None
+    max_weight_kg: float | None
+    require_in_stock: bool
+
+
+class RecommendationResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    request_id: str
+    status: ResponseStatus
+    explanation_mode: ExplanationMode
+    interpreted_filters: ActiveFilters
+    recommendations: list[RecommendationItem]
+    clarification_question: str | None
+    limitations: list[str]
+    artifact_version: str
+    fallback_reason: str | None = None  # bounded reason code, never prompt or user text
+    timings_ms: dict[str, float] = Field(default_factory=dict)
