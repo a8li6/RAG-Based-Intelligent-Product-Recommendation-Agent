@@ -153,3 +153,21 @@ def test_failed_build_leaves_no_partial_directory(tmp_path, catalog):
     with pytest.raises(EmbeddingError):
         build_artifacts(catalog, BrokenEmbedder(), tmp_path / "catalog-v1")
     assert list(tmp_path.iterdir()) == []
+
+
+def test_manifest_records_build_timing(built):
+    manifest = json.loads((built / MANIFEST_FILE).read_text())
+    assert manifest["embed_seconds"] >= 0
+    assert manifest["build_seconds"] >= manifest["embed_seconds"]
+
+
+def test_revision_pinning_is_recorded(built, catalog, embedder, tmp_path):
+    from recommender.index import is_pinned_revision
+
+    assert json.loads((built / MANIFEST_FILE).read_text())["revision_pinned"] is False
+    embedder.revision = "a" * 40
+    pinned = build_artifacts(catalog, embedder, tmp_path / "pinned")
+    assert json.loads((pinned / MANIFEST_FILE).read_text())["revision_pinned"] is True
+    assert is_pinned_revision("0123456789abcdef0123456789abcdef01234567")
+    for bad in ("main", "v1.0", "a" * 39, "A" * 40, "g" * 40, ""):
+        assert not is_pinned_revision(bad)

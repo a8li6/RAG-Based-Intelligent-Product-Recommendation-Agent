@@ -205,3 +205,24 @@ def test_invalid_input_writes_no_outputs(tmp_path):
     assert code == 1
     assert not report.exists()
     assert not canonical.exists()
+
+
+def test_build_index_warns_when_revision_is_not_pinned(tmp_path, capsys, embedder):
+    out = tmp_path / "catalog-v1"
+    assert (
+        main(["build-index", "--input", str(FIXTURE), "--output", str(out)], lambda s: embedder)
+        == 0
+    )
+    captured = capsys.readouterr()
+    assert "not reproducible" in captured.err
+    assert "embedding" in captured.out
+
+
+def test_build_index_is_quiet_when_revision_is_pinned(tmp_path, capsys, embedder):
+    embedder.revision = "b" * 40
+    out = tmp_path / "catalog-v1"
+    assert (
+        main(["build-index", "--input", str(FIXTURE), "--output", str(out)], lambda s: embedder)
+        == 0
+    )
+    assert "not reproducible" not in capsys.readouterr().err

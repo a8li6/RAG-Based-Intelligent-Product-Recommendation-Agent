@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
+import time
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -36,6 +38,12 @@ IDS_FILE = "product_ids.json"
 CATALOG_FILE = "catalog.jsonl"
 MANIFEST_FILE = "manifest.json"
 CHECKSUMMED_FILES = (INDEX_FILE, VECTORS_FILE, IDS_FILE, CATALOG_FILE)
+PINNED_REVISION = re.compile(r"^[0-9a-f]{40}$")
+
+
+def is_pinned_revision(revision: str) -> bool:
+    """True only for a full immutable commit hash; 'main' or a tag is not reproducible."""
+    return bool(PINNED_REVISION.fullmatch(revision))
 
 
 class ArtifactError(Exception):
@@ -74,8 +82,11 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.parent / f".{target.name}.tmp-{uuid.uuid4().hex[:8]}"
     tmp.mkdir()
+    started = time.perf_counter()
     try:
+        embed_started = time.perf_counter()
         vectors = embedder.encode_products(catalog_documents(catalog))
+        embed_seconds = time.perf_counter() - embed_started
         validate_vectors(vectors, expected_rows=len(catalog))
 
         index = faiss.IndexFlatIP(vectors.shape[1])
@@ -92,6 +103,7 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
             "vector_dim": int(vectors.shape[1]),
             "embedding_model": embedder.model_id,
             "embedding_revision": embedder.revision,
+            "revision_pinned": is_pinned_revision(embedder.revision),
             "passage_prefix": PASSAGE_PREFIX,
             "query_prefix": QUERY_PREFIX,
             "normalized": True,
@@ -100,6 +112,8 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
             "dependencies": _dependency_versions(),
             "files": {name: _sha256_file(tmp / name) for name in CHECKSUMMED_FILES},
         }
+        manifest["embed_seconds"] = round(embed_seconds, 4)
+        manifest["build_seconds"] = round(time.perf_counter() - started, 4)
         (tmp / MANIFEST_FILE).write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
         load_artifacts(tmp)  # verify the complete set before activating it
