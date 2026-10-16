@@ -64,3 +64,15 @@ class Product(BaseModel):
         if value.tzinfo is None or value.utcoffset() is None:
             raise ValueError("updated_at must be timezone-aware")
         return value
+
+
+class Constraints(BaseModel):
+    """Explicit hard constraints. A product must satisfy every active one."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    max_price_cents: int | None = Field(default=None, strict=True, ge=0)
+    currency: Literal["USD"] = "USD"
+    min_ram_gb: int | None = Field(default=None, strict=True, ge=1)
+    max_weight_kg: float | None = Field(default=None, gt=0, allow_inf_nan=False)
+    require_in_stock: bool = True
