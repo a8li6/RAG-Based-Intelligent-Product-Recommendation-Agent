@@ -11,8 +11,11 @@ from recommender.catalog import CatalogValidationError, load_catalog
 from recommender.config import ConfigError, Settings, load_settings
 from recommender.embeddings import E5Embedder, Embedder
 from recommender.index import ArtifactError, build_artifacts, load_artifacts
+from recommender.llm import Explainer
+from recommender.query import InvalidQueryError
 from recommender.retrieval import Retriever
-from recommender.schemas import Constraints
+from recommender.schemas import Constraints, Filters, RecommendationRequest
+from recommender.service import create_dependencies, recommend
 
 EmbedderFactory = Callable[[Settings], Embedder]
 
@@ -45,7 +48,10 @@ def cmd_validate_data(args: argparse.Namespace) -> int:
 
 
 def cmd_build_index(
-    args: argparse.Namespace, settings: Settings, embedder_factory: EmbedderFactory
+    args: argparse.Namespace,
+    settings: Settings,
+    embedder_factory: EmbedderFactory,
+    explainer: Explainer | None = None,
 ) -> int:
     try:
         catalog = load_catalog(args.input)
@@ -68,7 +74,10 @@ def cmd_build_index(
 
 
 def cmd_search(
-    args: argparse.Namespace, settings: Settings, embedder_factory: EmbedderFactory
+    args: argparse.Namespace,
+    settings: Settings,
+    embedder_factory: EmbedderFactory,
+    explainer: Explainer | None = None,
 ) -> int:
     directory = Path(args.artifacts) if args.artifacts else settings.artifact_dir
     try:
@@ -89,6 +98,42 @@ def cmd_search(
     for candidate in candidates:
         title = artifacts.catalog.products[candidate.row].title
         print(f"{candidate.product_id}  {candidate.score:.4f}  {title}")
+    return 0
+
+
+def cmd_recommend(
+    args: argparse.Namespace,
+    settings: Settings,
+    embedder_factory: EmbedderFactory,
+    explainer: Explainer | None = None,
+) -> int:
+    """Print the public response contract (the same JSON the API returns)."""
+    update: dict = {}
+    if args.artifacts:
+        update["artifact_dir"] = Path(args.artifacts)
+    if args.no_llm:
+        update["explanation_mode"] = "deterministic"
+    settings = settings.model_copy(update=update)
+    try:
+        request = RecommendationRequest(
+            query=args.query,
+            filters=Filters(
+                max_price_cents=args.max_price_cents,
+                min_ram_gb=args.min_ram_gb,
+                max_weight_kg=args.max_weight_kg,
+                require_in_stock=False if args.include_out_of_stock else None,
+            ),
+            requested_count=args.count,
+        )
+        deps = create_dependencies(settings, embedder_factory(settings), explainer)
+        result = recommend(request, None, deps)
+    except ArtifactError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    except (InvalidQueryError, ValueError) as exc:
+        print(f"error: invalid request: {exc}", file=sys.stderr)
+        return 2
+    print(result.response.model_dump_json(indent=2))
     return 0
 
 
@@ -113,10 +158,25 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("--max-weight-kg", type=float)
     search.add_argument("--include-out-of-stock", action="store_true")
     search.set_defaults(func=cmd_search)
+
+    rec = sub.add_parser("recommend", help="run the full workflow and print the response JSON")
+    rec.add_argument("--query", required=True)
+    rec.add_argument("--artifacts", help="artifact directory (default: ARTIFACT_DIR)")
+    rec.add_argument("--max-price-cents", type=int)
+    rec.add_argument("--min-ram-gb", type=int)
+    rec.add_argument("--max-weight-kg", type=float)
+    rec.add_argument("--include-out-of-stock", action="store_true")
+    rec.add_argument("--count", type=int, default=3, help="number of products, 1-3")
+    rec.add_argument("--no-llm", action="store_true", help="force deterministic explanations")
+    rec.set_defaults(func=cmd_recommend)
     return parser
 
 
-def main(argv: Sequence[str] | None = None, embedder_factory: EmbedderFactory | None = None) -> int:
+def main(
+    argv: Sequence[str] | None = None,
+    embedder_factory: EmbedderFactory | None = None,
+    explainer: Explainer | None = None,
+) -> int:
     args = build_parser().parse_args(argv)
     if args.func is cmd_validate_data:
         return cmd_validate_data(args)
@@ -125,7 +185,7 @@ def main(argv: Sequence[str] | None = None, embedder_factory: EmbedderFactory | 
     except ConfigError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    return args.func(args, settings, embedder_factory or default_embedder_factory)
+    return args.func(args, settings, embedder_factory or default_embedder_factory, explainer)
 
 
 if __name__ == "__main__":
