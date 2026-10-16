@@ -22,7 +22,12 @@ import faiss
 import numpy as np
 
 from recommender.catalog import Catalog, parse_catalog
-from recommender.documents import DOCUMENT_FORMAT_VERSION, catalog_documents
+from recommender.documents import (
+    DEFAULT_MAX_TOKENS,
+    DOCUMENT_FORMAT_VERSION,
+    catalog_documents,
+    check_document_lengths,
+)
 from recommender.embeddings import (
     PASSAGE_PREFIX,
     QUERY_PREFIX,
@@ -84,6 +89,11 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
     tmp.mkdir()
     started = time.perf_counter()
     try:
+        token_stats = None
+        count_tokens = getattr(embedder, "count_tokens", None)
+        if count_tokens is not None:  # fail fast, before embedding anything
+            limit = getattr(embedder, "max_tokens", DEFAULT_MAX_TOKENS)
+            token_stats = check_document_lengths(catalog, count_tokens, limit)
         embed_started = time.perf_counter()
         vectors = embedder.encode_products(catalog_documents(catalog))
         embed_seconds = time.perf_counter() - embed_started
@@ -108,6 +118,7 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
             "query_prefix": QUERY_PREFIX,
             "normalized": True,
             "document_format_version": DOCUMENT_FORMAT_VERSION,
+            "document_tokens": token_stats,
             "built_at": datetime.now(UTC).isoformat(),
             "dependencies": _dependency_versions(),
             "files": {name: _sha256_file(tmp / name) for name in CHECKSUMMED_FILES},

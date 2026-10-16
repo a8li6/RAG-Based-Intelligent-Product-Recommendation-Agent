@@ -83,6 +83,16 @@ class E5Embedder:
             )
         return self._model
 
+    @property
+    def max_tokens(self) -> int:
+        return int(self.model.max_seq_length)
+
+    def count_tokens(self, text: str) -> int:
+        """Token count as the model sees it, special tokens included, without truncation."""
+        return len(
+            self.model.tokenizer(text, add_special_tokens=True, truncation=False)["input_ids"]
+        )
+
     def _encode(self, prefixed: list[str]) -> np.ndarray:
         vectors = self.model.encode(
             prefixed,

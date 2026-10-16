@@ -15,6 +15,11 @@ class HashEmbedder:
     model_id = "test/hash-embedder"
     revision = "test-rev-1"
 
+    max_tokens = 512
+
+    def count_tokens(self, text):
+        return len(re.findall(r"\S+", text))
+
     def _vec(self, text: str) -> np.ndarray:
         vec = np.zeros(DIM, dtype=np.float64)
         for token in re.findall(r"[a-z0-9]+", text.lower()):
