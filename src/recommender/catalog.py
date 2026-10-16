@@ -93,6 +93,39 @@ def is_eligible(product: Product, constraints: Constraints) -> bool:
     return product.weight_kg is not None and product.weight_kg <= constraints.max_weight_kg
 
 
+TRANSFORMATION_RULES = (
+    "surrounding whitespace stripped from text fields",
+    "Unicode NFC normalization of title, brand, description and use_cases",
+    "records sorted by product_id",
+    "canonical JSON: sorted keys, compact separators, UTF-8, one record per line",
+)
+NULLABLE_FIELDS = ("ram_gb", "storage_gb", "weight_kg", "gpu_type")
+
+
+def catalog_report(catalog: Catalog, source_path: str | Path | None = None) -> dict:
+    """Concise validation report: counts, hashes, missing specs, source and transformations."""
+    report: dict = {
+        "record_count": len(catalog),
+        "catalog_sha256": catalog.sha256,
+        "missing_fields": {
+            field: sum(getattr(p, field) is None for p in catalog.products)
+            for field in NULLABLE_FIELDS
+        },
+        "in_stock_count": sum(p.in_stock for p in catalog.products),
+        "categories": sorted({p.category for p in catalog.products}),
+        "currencies": sorted({p.currency for p in catalog.products}),
+        "transformations": list(TRANSFORMATION_RULES),
+    }
+    if source_path is not None:
+        raw = Path(source_path).read_bytes()
+        report["source"] = {
+            "file": Path(source_path).name,
+            "bytes": len(raw),
+            "sha256": hashlib.sha256(raw).hexdigest(),  # hash of the untouched original
+        }
+    return report
+
+
 def parse_catalog(text: str) -> Catalog:
     """Parse JSONL text. Collects every error and rejects the whole build if any exist."""
     issues: list[CatalogIssue] = []

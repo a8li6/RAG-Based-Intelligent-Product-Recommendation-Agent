@@ -112,3 +112,27 @@ def test_all_errors_are_collected_not_just_first():
 def test_empty_catalog_is_rejected():
     with pytest.raises(CatalogValidationError):
         parse_catalog("\n\n")
+
+
+def test_report_summarizes_the_catalog(catalog):
+    from recommender.catalog import catalog_report
+
+    report = catalog_report(catalog, FIXTURE)
+    assert report["record_count"] == 8
+    assert report["catalog_sha256"] == catalog.sha256
+    assert report["missing_fields"] == {
+        "ram_gb": 0, "storage_gb": 0, "weight_kg": 1, "gpu_type": 0,
+    }  # fmt: skip
+    assert report["in_stock_count"] == 7
+    assert report["categories"] == ["laptop"]
+    assert report["currencies"] == ["USD"]
+    assert report["source"]["file"] == "products.jsonl"
+    assert report["source"]["bytes"] == FIXTURE.stat().st_size
+    assert len(report["source"]["sha256"]) == 64
+    assert "records sorted by product_id" in report["transformations"]
+
+
+def test_report_without_a_source_has_no_source_section(catalog):
+    from recommender.catalog import catalog_report
+
+    assert "source" not in catalog_report(catalog)

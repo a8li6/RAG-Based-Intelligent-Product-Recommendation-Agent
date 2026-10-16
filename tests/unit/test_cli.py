@@ -165,3 +165,43 @@ def test_recommend_blank_query_exits_2(tmp_path, capsys, embedder):
     capsys.readouterr()
     args = ["recommend", "--query", "   ", "--artifacts", str(out), "--no-llm"]
     assert main(args, lambda s: embedder) == 2
+
+
+def test_validate_data_writes_report_and_canonical_snapshot(tmp_path, capsys):
+    report = tmp_path / "report.json"
+    canonical = tmp_path / "canonical.jsonl"
+    args = ["validate-data", "--input", str(FIXTURE), "--report", str(report)]
+    assert main([*args, "--canonical-out", str(canonical)]) == 0
+    body = json.loads(report.read_text())
+    assert body["record_count"] == 8
+    assert body["missing_fields"]["weight_kg"] == 1
+    assert body["source"]["bytes"] == FIXTURE.stat().st_size
+
+    from recommender.catalog import load_catalog
+
+    assert canonical.read_bytes() == load_catalog(FIXTURE).canonical_bytes()
+    assert load_catalog(canonical).sha256 == body["catalog_sha256"]  # snapshot round-trips
+
+
+def test_validate_data_never_overwrites_the_input(tmp_path, capsys):
+    original = tmp_path / "products.jsonl"
+    original.write_bytes(FIXTURE.read_bytes())
+    before = original.read_bytes()
+    assert main(["validate-data", "--input", str(original), "--canonical-out", str(original)]) == 2
+    assert main(["validate-data", "--input", str(original), "--report", str(original)]) == 2
+    assert "must not be the input" in capsys.readouterr().err
+    assert original.read_bytes() == before
+
+
+def test_invalid_input_writes_no_outputs(tmp_path):
+    bad = tmp_path / "bad.jsonl"
+    bad.write_text("{oops\n", encoding="utf-8")
+    report = tmp_path / "report.json"
+    canonical = tmp_path / "canonical.jsonl"
+    code = main(
+        ["validate-data", "--input", str(bad), "--report", str(report),
+         "--canonical-out", str(canonical)]
+    )  # fmt: skip
+    assert code == 1
+    assert not report.exists()
+    assert not canonical.exists()

@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
-from recommender.catalog import CatalogValidationError, load_catalog
+from recommender.catalog import CatalogValidationError, catalog_report, load_catalog
 from recommender.config import ConfigError, Settings, load_settings
 from recommender.embeddings import E5Embedder, Embedder
 from recommender.index import ArtifactError, build_artifacts, load_artifacts
@@ -29,7 +30,25 @@ def default_embedder_factory(settings: Settings) -> Embedder:
     )
 
 
+def _safe_output(path: str, source: str, label: str) -> Path | None:
+    """Outputs must never overwrite the original source file."""
+    target = Path(path)
+    if target.resolve() == Path(source).resolve():
+        print(f"error: --{label} must not be the input file ({source})", file=sys.stderr)
+        return None
+    return target
+
+
 def cmd_validate_data(args: argparse.Namespace) -> int:
+    report_path = canonical_path = None
+    if args.report and (report_path := _safe_output(args.report, args.input, "report")) is None:
+        return 2
+    if (
+        args.canonical_out
+        and (canonical_path := _safe_output(args.canonical_out, args.input, "canonical-out"))
+        is None
+    ):
+        return 2
     try:
         catalog = load_catalog(args.input)
     except FileNotFoundError:
@@ -43,6 +62,12 @@ def cmd_validate_data(args: argparse.Namespace) -> int:
         for issue in exc.issues:
             print(f"  {issue}", file=sys.stderr)
         return 1
+    if report_path is not None:
+        report_path.write_text(
+            json.dumps(catalog_report(catalog, args.input), indent=2) + "\n", encoding="utf-8"
+        )
+    if canonical_path is not None:
+        canonical_path.write_bytes(catalog.canonical_bytes())
     print(f"OK: {len(catalog)} records, sha256={catalog.sha256}")
     return 0
 
@@ -143,6 +168,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = sub.add_parser("validate-data", help="validate a JSONL product catalog")
     validate.add_argument("--input", required=True, help="path to products.jsonl")
+    validate.add_argument("--report", help="write a JSON validation report to this path")
+    validate.add_argument(
+        "--canonical-out", help="write the deterministic ID-sorted canonical snapshot here"
+    )
     validate.set_defaults(func=cmd_validate_data)
 
     build = sub.add_parser("build-index", help="embed the catalog and write index artifacts")
