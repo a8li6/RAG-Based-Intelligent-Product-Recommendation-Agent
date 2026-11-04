@@ -1,5 +1,9 @@
 # Progress Log
 
+> **Latest status:** see "Session 4" at the end and `docs/acceptance_checklist.md`. Sections for
+> sessions 1-3 are kept as history; several of their "still open" items were later resolved or
+> superseded (listed at the end).
+
 ## Session 1 - M0 and M1 (catalog and filters)
 
 **Completed**
@@ -140,3 +144,54 @@ plus several small M0/M1 gaps. The gaps that do not need network access are now 
 **Note for M5:** with the 8-product fixture, Recall@10 is trivial. M5 first needs the larger
 reviewed catalog. Retrieval-quality numbers computed with the hash test embedder are not
 meaningful; they only validate the evaluation tooling until the real model can run.
+
+## Session 4 - offline redesign, M4, M5, M6 (release v0.1.0)
+
+**Decision that changed the design.** The project owner required that the project depend on nothing
+outside PyPI (no Hugging Face download, no Ollama, no model server). Consequences:
+- A built-in offline embedder (hashed TF-IDF with a small curated concept lexicon) is now the
+  default; the E5 backend and the LLM explainer are optional and unverified.
+- Explanations are deterministic templates by default. This is a departure from the original
+  guide (which recommended E5 and a local LLM) and is stated in the README, architecture and evaluation.
+
+**M4 (API and UI).** FastAPI with `/health`, `/ready`, `/recommendations`, stable error codes, input
+and concurrency bounds, and a stateless design (client-held session). Streamlit UI that reaches the
+core only through an HTTP client. Exercised with `TestClient`, Streamlit's `AppTest`, the real
+uvicorn and Streamlit servers, and a real browser (screenshots in `docs/images/`).
+
+**M5 (evaluation).** 60-product demo catalog; 60-query evaluation set (20 development, 40 held-out
+test, rule-based labels, frozen test digest); metrics with explicit denominators; BM25, random and
+post-filter baselines; an independent claim audit; calibration of an abstention cutoff on the
+development split only. Raw reports in `reports/`, generated analysis in `docs/evaluation.md`.
+
+**M6 (publication).** CI with pinned actions (run on GitHub: success), a single `scripts/check.sh`,
+architecture document with enforced boundary rules, README whose quick start was executed verbatim
+in a fresh clone, data card, acceptance checklist, portfolio notes, release notes, tag `v0.1.0`.
+
+**Defects found by tests during this session (all fixed, with regression tests)**
+- "no more than $900" and "no more than 1.5 kg" were parsed as minimum values.
+- The stemmer did not unify "code" and "coding"; use-case matching needed concept awareness and a
+  fix so the generic word "work" does not match unrelated use cases.
+- Evaluation settings read environment variables, so `RETRIEVAL_K` could silently change results.
+- One query text appeared in both the development and test splits (leakage).
+- A test helper and two claims in the generated evaluation document were wrong; the document
+  generator now asserts every qualitative claim against the data.
+
+**Honest results.** Held-out: 0 constraint violations among returned products, all displayed claims
+valid under an independent audit, filter-first retrieval ahead of post-filtering and comparable to
+BM25. The abstention cutoff did **not** generalize (an irrelevant query scored above an answerable
+one), so it is off by default. Findings and limits: `docs/evaluation.md`.
+
+**Items from earlier sessions: resolved or superseded**
+- `requirements-lock.txt` and the clean-environment install: done and verified.
+- Real E5 pilot, immutable model revision, Ollama digest and `think: false` check: **no longer
+  required** by the default pipeline; remain unverified for the optional backends.
+- Document token-length check: implemented (tested with a stand-in tokenizer; the real tokenizer path is unverified).
+- API and UI (M4), evaluation (M5), CI and documentation (M6): done.
+
+**Still open**
+- Run the optional E5 backend and the optional LLM explainer against real models and evaluate them
+  on a fresh held-out set.
+- Improve the built-in embedder (field-aware weighting, negation) and re-measure on a fresh held-out set.
+- A real, licensed catalog; a native Persian evaluation track; more categories.
+- Confirm repository visibility (currently public).
