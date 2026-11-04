@@ -222,7 +222,7 @@ def test_whitespace_only_query_in_service(deps):
 
 def test_valid_llm_plan_sets_llm_mode(artifact_dir, embedder):
     explainer = FakeExplainer("valid")
-    deps = make_deps(artifact_dir, embedder, explainer)
+    deps = make_deps(artifact_dir, embedder, explainer, explanation_mode="llm")
     response = ask(deps, REFERENCE).response
     assert explainer.calls == 1
     assert response.explanation_mode == "llm"
@@ -247,7 +247,7 @@ def test_llm_failure_falls_back_with_same_products(artifact_dir, embedder, behav
     expected = ids(ask(baseline, REFERENCE))
 
     explainer = FakeExplainer(behavior)
-    deps = make_deps(artifact_dir, embedder, explainer)
+    deps = make_deps(artifact_dir, embedder, explainer, explanation_mode="llm")
     result = ask(deps, REFERENCE)
     response = result.response
     assert explainer.calls == 1  # one attempt only

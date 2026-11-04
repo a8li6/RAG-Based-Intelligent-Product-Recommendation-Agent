@@ -22,6 +22,9 @@ class Settings(BaseSettings):
 
     catalog_path: Path = Path("data/sample/products.jsonl")
     artifact_dir: Path = Path("artifacts/catalog-v1")
+    # "builtin" is fully offline (no model download, no service). "e5" is optional and needs the
+    # `neural` extra plus a one-time model download.
+    embedding_backend: Literal["builtin", "e5"] = "builtin"
     embedding_model: str = Field(default="intfloat/multilingual-e5-small", min_length=1)
     embedding_revision: str = Field(default="main", min_length=1)
     embedding_device: str = Field(default="cpu", min_length=1)
@@ -32,7 +35,7 @@ class Settings(BaseSettings):
     retrieval_k: int = Field(default=10, ge=1, le=100)
     max_recommendations: int = Field(default=3, ge=1, le=3)
     default_currency: Literal["USD"] = "USD"
-    explanation_mode: Literal["llm", "deterministic"] = "llm"
+    explanation_mode: Literal["llm", "deterministic"] = "deterministic"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     max_query_chars: int = Field(default=2000, ge=1, le=10_000)
 

@@ -17,7 +17,8 @@ def test_defaults_are_valid():
     assert s.retrieval_k == 10
     assert s.max_recommendations == 3
     assert s.default_currency == "USD"
-    assert s.explanation_mode == "llm"
+    assert s.explanation_mode == "deterministic"
+    assert s.embedding_backend == "builtin"
     assert s.llm_base_url == "http://127.0.0.1:11434"
 
 
@@ -47,6 +48,7 @@ def test_env_override(monkeypatch):
         {"llm_timeout_seconds": -1},
         {"default_currency": "EUR"},
         {"explanation_mode": "freeform"},
+        {"embedding_backend": "remote"},
         {"retrieval_k": 0},
         {"retrieval_k": 1000},
         {"max_recommendations": 4},

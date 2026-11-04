@@ -11,7 +11,6 @@ requires-python = ">=3.11,<3.12"
 dependencies = [
     "faiss-cpu",
     "numpy",
-    "sentence-transformers",
     "pydantic",
     "pydantic-settings",
     "fastapi",
@@ -22,6 +21,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
+# Optional, never required: neural embeddings (one-time model download).
+neural = ["sentence-transformers"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

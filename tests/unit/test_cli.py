@@ -137,7 +137,7 @@ def test_recommend_uses_an_injected_explainer_and_falls_back(tmp_path, capsys, e
 
     out = build_fixture_index(tmp_path, embedder)
     capsys.readouterr()
-    args = ["recommend", "--query", "laptop for coding", "--artifacts", str(out)]
+    args = ["recommend", "--query", "laptop for coding", "--artifacts", str(out), "--llm"]
     assert main(args, lambda s: embedder, Down()) == 0
     body = json.loads(capsys.readouterr().out)
     assert body["status"] == "ok"

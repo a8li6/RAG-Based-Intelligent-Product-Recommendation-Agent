@@ -149,6 +149,8 @@ def cmd_recommend(
         update["artifact_dir"] = Path(args.artifacts)
     if args.no_llm:
         update["explanation_mode"] = "deterministic"
+    elif args.llm:
+        update["explanation_mode"] = "llm"
     settings = settings.model_copy(update=update)
     try:
         request = RecommendationRequest(
@@ -207,7 +209,9 @@ def build_parser() -> argparse.ArgumentParser:
     rec.add_argument("--max-weight-kg", type=float)
     rec.add_argument("--include-out-of-stock", action="store_true")
     rec.add_argument("--count", type=int, default=3, help="number of products, 1-3")
-    rec.add_argument("--no-llm", action="store_true", help="force deterministic explanations")
+    mode = rec.add_mutually_exclusive_group()
+    mode.add_argument("--no-llm", action="store_true", help="force deterministic explanations")
+    mode.add_argument("--llm", action="store_true", help="try the optional local LLM explainer")
     rec.set_defaults(func=cmd_recommend)
     return parser
 
