@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import re
 
+from recommender import persian
 from recommender.catalog import Catalog, is_eligible
 from recommender.local_embedder import concepts_of
 from recommender.query import QueryIntent
@@ -71,7 +72,7 @@ def matching_use_cases(use_cases: list[str], semantic_query: str) -> list[str]:
     concept it triggers (curated lexicon, e.g. "coding" ~ "Python development") is also
     triggered by the request. Generic words alone ("work") trigger no concept.
     """
-    query_tokens = _tokens(semantic_query)
+    query_tokens = _tokens(semantic_query) | _tokens(" ".join(persian.translate(semantic_query)))
     query_concepts = concepts_of(semantic_query)
     matched = []
     for use_case in use_cases:

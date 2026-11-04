@@ -151,3 +151,19 @@ def test_the_evaluation_ignores_the_process_environment(dev, monkeypatch):
     assert other["configuration"]["retrieval_k"] == 10
     assert other["configuration"]["settings"]["explanation_mode"] == "deterministic"
     assert strip_timing(other) == strip_timing(dev)
+
+
+def test_english_results_are_unchanged_by_persian_support():
+    """The published English report must still be exactly what the current code produces."""
+    committed = json.loads(
+        (ROOT / "reports" / "eval-test-no-cutoff.json").read_text(encoding="utf-8")
+    )
+    fresh = run_evaluation("test", runs=1)
+    assert fresh["summary"] == committed["summary"]
+    assert [q["returned"] for q in fresh["per_query"]] == [
+        q["returned"] for q in committed["per_query"]
+    ]
+    assert (
+        fresh["configuration"]["embedder_revision"]
+        == committed["configuration"]["embedder_revision"]
+    )

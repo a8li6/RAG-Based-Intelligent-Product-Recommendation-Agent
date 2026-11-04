@@ -21,6 +21,7 @@ from functools import lru_cache
 
 import numpy as np
 
+from recommender import persian
 from recommender.embeddings import EmbeddingError, validate_vectors
 
 MODEL_ID = "builtin-hashed-tfidf-v1"
@@ -172,9 +173,8 @@ for _concept, _words in CONCEPTS.items():
 
 def concepts_of(text: str) -> frozenset[str]:
     """Concept tokens triggered by the words of a text (curated lexicon only)."""
-    return frozenset(
-        concept for word in tokenize(text) for concept in _CONCEPT_OF.get(stem(word), ())
-    )
+    english = (concept for word in tokenize(text) for concept in _CONCEPT_OF.get(stem(word), ()))
+    return frozenset(english) | persian.concepts_of(text)
 
 
 def tokenize(text: str) -> list[str]:
@@ -191,7 +191,9 @@ def _bin_and_sign(feature: str, dim: int) -> tuple[int, float]:
 def features(text: str) -> dict[str, float]:
     """Weighted sparse features: stems, concept tokens and character trigrams."""
     counts: dict[str, float] = {}
-    for word in tokenize(text):
+    # Persian phrases are translated to the catalog's own vocabulary first, so an exact word
+    # match is possible; unknown Persian words contribute nothing.
+    for word in [*tokenize(text), *tokenize(" ".join(persian.translate(text)))]:
         root = stem(word)
         counts[f"w:{root}"] = counts.get(f"w:{root}", 0.0) + WORD_WEIGHT
         for concept in _CONCEPT_OF.get(root, ()):
@@ -201,6 +203,8 @@ def features(text: str) -> dict[str, float]:
             for i in range(len(padded) - 2):
                 key = f"g:{padded[i : i + 3]}"
                 counts[key] = counts.get(key, 0.0) + TRIGRAM_WEIGHT
+    for concept in persian.concepts_of(text):  # Persian words map to the same concept ids
+        counts[concept] = counts.get(concept, 0.0) + CONCEPT_WEIGHT
     return {k: 1.0 + math.log(v) if v >= 1 else v for k, v in counts.items()}
 
 

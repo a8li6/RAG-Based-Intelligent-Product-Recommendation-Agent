@@ -162,3 +162,49 @@ def test_clear_phrases():
     assert m(fa.CLEAR[0], "محدودیت وزن را حذف کن").group("what") == "وزن"
     assert m(fa.CLEAR[1], "بدون محدودیت بودجه").group("what") == "بودجه"
     assert re.fullmatch(r"[؀-ۿ]+", "وزن") and fa.CLEAR_FIELD["رم"] == "min_ram_gb"
+
+
+# --- translation to the catalog's vocabulary --------------------------------------------------
+
+
+def test_translation_covers_every_use_case_tag_in_the_catalog():
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    tags = {
+        tag
+        for line in (root / "data" / "demo" / "products.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        for tag in json.loads(line)["use_cases"]
+    }
+    assert tags <= set(fa.TRANSLATIONS), tags - set(fa.TRANSLATIONS)
+
+
+@pytest.mark.parametrize(
+    ("text", "english"),
+    [
+        ("برنامه‌نویسی", "coding"),
+        ("توسعه نرم‌افزار", "development"),
+        ("تحلیل داده", "data analysis"),
+        ("با مترو", "commuting"),
+        ("یک سفر", "travel"),
+        ("برای دانشجوها", "study"),
+        ("کار در خانه", "home office"),
+        ("بازی‌های ویدیویی", "gaming"),
+        ("تدوین ویدیو", "video editing"),
+        ("طراحی گرافیک", "graphic design"),
+        ("تولید محتوا", "content creation"),
+        ("رندر", "3D work"),
+        ("ارائه", "presentations"),
+        ("قابل حمل", "portable"),
+    ],
+)
+def test_persian_phrases_translate_to_catalog_words(text, english):
+    assert english in fa.translate(text)
+
+
+def test_translation_ignores_generic_and_non_persian_text():
+    assert fa.translate("لپ‌تاپ") == [] == fa.translate("laptop for coding")
+    assert fa.translate("دستور پخت اسموتی موز") == []

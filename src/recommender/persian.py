@@ -261,3 +261,48 @@ def concepts_of(text: str) -> frozenset[str]:
         return frozenset()
     normalized = re.sub(r"[‌‍]", " ", normalize_persian(text))
     return frozenset(c for c, pattern in _PATTERNS.items() if pattern.search(normalized))
+
+
+# --- translation to the catalog's own vocabulary ---------------------------------------------
+# The catalog has a controlled vocabulary of use-case tags. Each tag below lists Persian phrases
+# that express it, so a Persian request can match the same words an English request would
+# (an exact word match is stronger evidence than a shared concept). Derived from the catalog's
+# tags and general vocabulary, not from any evaluation query.
+TRANSLATIONS: dict[str, tuple[str, ...]] = {
+    "coding": ("برنامه نویسی", "برنامه نویس", "کدنویسی", "کد نویسی", "کد زنی", "پروگرمینگ"),
+    "development": ("توسعه نرم افزار", "توسعه دهنده", "توسعه", "دولوپر", "دولوپمنت"),
+    "data analysis": ("تحلیل داده", "تحلیل داده ها", "تحلیل دیتا", "داده کاوی", "علم داده"),
+    "commuting": ("رفت و آمد", "رفت وآمد", "رفتوآمد", "مترو", "اتوبوس", "ایاب و ذهاب"),
+    "travel": ("سفر", "مسافرت", "مسافر", "پرواز"),
+    "study": ("درس", "دانشجو", "دانشگاه", "مدرسه", "کلاس", "تکلیف", "تکالیف", "تحصیل", "مطالعه"),
+    "web browsing": ("مرور وب", "وب گردی", "گشت و گذار در اینترنت", "مرور اینترنت"),
+    "office work": ("کار اداری", "کارهای اداری", "اداری", "اداره", "دفتر کار", "اکسل", "ایمیل"),
+    "home office": ("دورکاری", "دور کاری", "کار در خانه", "کار از خانه", "کار خانگی"),
+    "desk work": ("میز کار", "پشت میز", "کار پشت میز"),
+    "gaming": ("بازی", "گیم", "گیمینگ", "گیمر", "اسپورت"),
+    "3D work": ("سه بعدی", "تری دی", "رندر", "رندرینگ", "مدل سازی"),
+    "content creation": ("تولید محتوا", "محتوا سازی", "تولید کننده محتوا", "ساخت محتوا"),
+    "video editing": ("تدوین ویدیو", "تدوین ویدئو", "تدوین فیلم", "ادیت ویدیو", "ادیت فیلم", "تدوین"),
+    "graphic design": ("طراحی گرافیک", "گرافیست", "طراحی گرافیکی"),
+    "presentations": ("ارائه", "پرزنتیشن", "اسلاید"),
+    # descriptive words that appear in catalog text
+    "portable": ("قابل حمل", "قابل جابجایی"),
+    "lightweight": ("سبک", "کم وزن", "سبک وزن"),
+}  # fmt: skip
+_TRANSLATION_PATTERNS = {
+    english: _compile(
+        _LEFT + "(?:" + "|".join(re.escape(p) for p in sorted(phrases, key=len, reverse=True)) + ")"
+        + _SUFFIX + _RIGHT
+    )
+    for english, phrases in TRANSLATIONS.items()
+}  # fmt: skip
+
+
+def translate(text: str) -> list[str]:
+    """English catalog words/phrases expressed by the Persian words of a text (empty otherwise)."""
+    if not has_persian(text):
+        return []
+    normalized = re.sub(r"[\u200c\u200d]", " ", normalize_persian(text))
+    return [
+        english for english, pattern in _TRANSLATION_PATTERNS.items() if pattern.search(normalized)
+    ]
