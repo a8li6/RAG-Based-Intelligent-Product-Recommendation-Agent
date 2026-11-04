@@ -18,6 +18,7 @@ from decimal import Decimal, InvalidOperation
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from recommender import persian as fa
 from recommender.schemas import (
     MAX_PRICE_CENTS,
     MAX_RAM_GB,
@@ -203,7 +204,7 @@ def normalize_query(text: str, max_chars: int = 2000) -> str:
         ch if (ch.isspace() or unicodedata.category(ch)[0] != "C") else " "
         for ch in unicodedata.normalize("NFKC", text)
     )
-    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    cleaned = re.sub(r"\s+", " ", fa.normalize_persian(cleaned)).strip()
     if not cleaned:
         raise InvalidQueryError("query must not be empty")
     if len(cleaned) > max_chars:
@@ -234,7 +235,8 @@ def _money_cents(token: str, strict: bool) -> int | str:
 def _parse_text(text: str) -> _Parsed:
     p = _Parsed()
 
-    for pattern, question in (
+    persian = fa.has_persian(text)
+    ask_patterns = [
         (NEGATIVE_MONEY, "Amounts cannot be negative. What is your maximum budget in USD?"),
         (FOREIGN_CURRENCY, "Only USD is supported. Please give the budget in US dollars."),
         (PRICE_BETWEEN, "I can only apply a maximum budget. What is the most you want to spend?"),
@@ -248,7 +250,17 @@ def _parse_text(text: str) -> _Parsed:
             "I can only filter by a maximum weight. What is the heaviest you would accept?",
         ),
         (WEIGHT_BAD_UNIT, "Please give weight in kilograms, for example 'at most 1.5 kg'."),
-    ):
+    ]
+    if persian:  # the same questions for the Persian phrasings of the same constructs
+        ask_patterns += [
+            (fa.FOREIGN_CURRENCY, ask_patterns[1][1]),
+            (fa.PRICE_BETWEEN, ask_patterns[2][1]),
+            (fa.PRICE_MIN, ask_patterns[3][1]),
+            (fa.RAM_MAX, ask_patterns[4][1]),
+            (fa.WEIGHT_MIN, ask_patterns[5][1]),
+            (fa.WEIGHT_BAD_UNIT, ask_patterns[6][1]),
+        ]
+    for pattern, question in ask_patterns:
         for m in pattern.finditer(text):
             p.ask(question)
             p.spans.append(m.span())
@@ -259,8 +271,15 @@ def _parse_text(text: str) -> _Parsed:
     for m in PRICE_POST.finditer(text):
         if not _overlaps(p.spans, m.span()):
             _record_price(p, m, strict=False)
+    if persian:
+        for m in fa.PRICE_PRE.finditer(text):
+            if not _overlaps(p.spans, m.span()):
+                _record_price(p, m, strict=m.group("strict") is not None)
+        for m in fa.PRICE_POST.finditer(text):
+            if not _overlaps(p.spans, m.span()):
+                _record_price(p, m, strict=False)
 
-    for pattern in RAM_MIN:
+    for pattern in [*RAM_MIN, *(fa.RAM_MIN if persian else [])]:
         for m in pattern.finditer(text):
             if _overlaps(p.spans, m.span()):
                 continue
@@ -271,7 +290,7 @@ def _parse_text(text: str) -> _Parsed:
                 p.values["min_ram_gb"].append(int(number))
             p.spans.append(m.span())
 
-    for pattern in WEIGHT_MAX:
+    for pattern in [*WEIGHT_MAX, *(fa.WEIGHT_MAX if persian else [])]:
         for m in pattern.finditer(text):
             if _overlaps(p.spans, m.span()):
                 continue
@@ -282,17 +301,20 @@ def _parse_text(text: str) -> _Parsed:
                 p.values["max_weight_kg"].append(float(number))
             p.spans.append(m.span())
 
-    for m in IN_STOCK.finditer(text):
-        p.stock = True
-        p.spans.append(m.span())
-
-    for pattern in CLEAR:
+    for pattern in [IN_STOCK, *([fa.IN_STOCK] if persian else [])]:
         for m in pattern.finditer(text):
-            p.cleared.add(CLEAR_FIELD[m.group("what").lower()])
+            p.stock = True
+            p.spans.append(m.span())
+
+    for pattern, fields in [(c, CLEAR_FIELD) for c in CLEAR] + (
+        [(c, fa.CLEAR_FIELD) for c in fa.CLEAR] if persian else []
+    ):
+        for m in pattern.finditer(text):
+            p.cleared.add(fields[m.group("what").lower()])
             p.spans.append(m.span())
 
     remaining = _blank(text, p.spans)
-    if re.search(MONEY, remaining, FLAGS):
+    if re.search(MONEY, remaining, FLAGS) or (persian and re.search(fa.MONEY, remaining)):
         p.ask(
             "I found an amount but cannot tell what it limits. "
             "Did you mean a maximum budget, e.g. 'under $900' or 'at most $900'?"
@@ -329,11 +351,12 @@ def _blank(text: str, spans: list[tuple[int, int]]) -> str:
 
 def _semantic_text(remaining: str) -> str | None:
     pieces = []
+    noise = NOISE | fa.NOISE if fa.has_persian(remaining) else NOISE
     for piece in re.split(r"[,;]", remaining):
         words = [w for w in re.split(r"\s+", piece.strip(" .:!?")) if w]
-        while words and words[0].lower().strip(".:!?") in NOISE:
+        while words and words[0].lower().strip(".:!?") in noise:
             words.pop(0)
-        while words and words[-1].lower().strip(".:!?") in NOISE:
+        while words and words[-1].lower().strip(".:!?") in noise:
             words.pop()
         if words:
             pieces.append(" ".join(words))
@@ -404,7 +427,10 @@ def parse_and_merge(
             explicit.append("require_in_stock")
 
     semantic = parsed.semantic or session.semantic_query or DEFAULT_SEMANTIC
-    if question is None and merged["max_price_cents"] is None and SOFT_PRICE.search(normalized):
+    soft_price = SOFT_PRICE.search(normalized) or (
+        fa.has_persian(normalized) and fa.SOFT_PRICE.search(normalized)
+    )
+    if question is None and merged["max_price_cents"] is None and soft_price:
         question = "What is your maximum budget in USD? I will not guess a price limit."
 
     intent = QueryIntent(

@@ -13,8 +13,14 @@ from __future__ import annotations
 
 import re
 
+
+def _compile(pattern: str) -> re.Pattern:
+    """All patterns ignore case: Persian text often mixes in Latin 'RAM', 'GB' and 'USD'."""
+    return re.compile(pattern, re.IGNORECASE)
+
+
 NUM = r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
-PERSIAN_LETTERS = re.compile(r"[؀-ۿﭐ-﷿ﹰ-﻿]")
+PERSIAN_LETTERS = _compile(r"[؀-ۿﭐ-﷿ﹰ-﻿]")
 
 _DIGITS = str.maketrans(
     "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
@@ -22,7 +28,7 @@ _DIGITS = str.maketrans(
 )
 _LETTERS = str.maketrans({"ي": "ی", "ك": "ک", "ۀ": "ه", "ة": "ه", "ـ": ""})
 _PUNCT = str.maketrans({"٫": ".", "٬": ",", "،": ", ", "؛": "; ", "؟": "? "})
-_SLASH_DECIMAL = re.compile(r"(\d)\s*/\s*(\d)(?=\s*(?:کیلو|kg))")
+_SLASH_DECIMAL = _compile(r"(\d)\s*/\s*(\d)(?=\s*(?:کیلو|kg))")
 
 
 def has_persian(text: str) -> bool:
@@ -50,43 +56,43 @@ _INCL = (
 )
 _MORE = r"(?:یا\s*(?:بیشتر|بالاتر|بالا)|به\s*بالا|و\s*(?:بیشتر|بالاتر))"
 
-PRICE_PRE = re.compile(rf"(?:\b(?P<strict>{_STRICT})|(?P<incl>{_INCL}))\s*(?P<money>{MONEY})")
-PRICE_POST = re.compile(
+PRICE_PRE = _compile(rf"(?:\b(?P<strict>{_STRICT})|(?P<incl>{_INCL}))\s*(?P<money>{MONEY})")
+PRICE_POST = _compile(
     rf"(?P<money>{MONEY})\s*(?P<post>یا\s*(?:کمتر|زیر|پایین\s?تر)|حداکثر|سقف|بودجه)"
 )
-PRICE_MIN = re.compile(rf"\b(?:بالای|بیشتر\s+از|بالاتر\s+از|حداقل)\s*{MONEY}")
-PRICE_BETWEEN = re.compile(
+PRICE_MIN = _compile(rf"\b(?:بالای|بیشتر\s+از|بالاتر\s+از|حداقل)\s*{MONEY}")
+PRICE_BETWEEN = _compile(
     rf"\b(?:بین|از)\s*{NUM}\s*(?:دلار)?\s*(?:تا|و|الی)\s*{NUM}\s*(?:دلار(?:ی)?|usd)"
 )
-FOREIGN_CURRENCY = re.compile(
+FOREIGN_CURRENCY = _compile(
     rf"{NUM}\s*(?:(?:میلیون|هزار|میلیارد)\s*)?(?:تومان|تومن|ریال|یورو|پوند|لیر|درهم)"
 )
 
 RAM_MIN = [
-    re.compile(rf"(?:حداقل|دست\s*کم)\s*(?P<n>{NUM})\s*{_GB}\s*{_RAM}"),
-    re.compile(rf"{_RAM}\s*(?:حداقل|دست\s*کم)\s*(?P<n>{NUM})\s*{_GB}"),
-    re.compile(rf"(?P<n>{NUM})\s*{_GB}\s*{_RAM}\s*{_MORE}"),
-    re.compile(rf"{_RAM}\s*(?P<n>{NUM})\s*{_GB}\s*{_MORE}"),
+    _compile(rf"(?:حداقل|دست\s*کم)\s*(?P<n>{NUM})\s*{_GB}\s*{_RAM}"),
+    _compile(rf"{_RAM}\s*(?:حداقل|دست\s*کم)\s*(?P<n>{NUM})\s*{_GB}"),
+    _compile(rf"(?P<n>{NUM})\s*{_GB}\s*{_RAM}\s*{_MORE}"),
+    _compile(rf"{_RAM}\s*(?P<n>{NUM})\s*{_GB}\s*{_MORE}"),
 ]
-RAM_MAX = re.compile(rf"(?:حداکثر|کمتر\s+از|زیر|\bتا\b)\s*(?P<n>{NUM})\s*{_GB}\s*{_RAM}")
+RAM_MAX = _compile(rf"(?:حداکثر|کمتر\s+از|زیر|\bتا\b)\s*(?P<n>{NUM})\s*{_GB}\s*{_RAM}")
 
 WEIGHT_MAX = [
-    re.compile(
+    _compile(
         rf"(?:وزن\s*)?(?:{_STRICT}|سبک\s?تر\s+از|حداکثر|حد\s?اکثر|نهایتا|نهایتاً|سقف|\bتا\b)\s*"
         rf"(?P<n>{NUM})\s*{_KG}"
     ),
-    re.compile(rf"(?P<n>{NUM})\s*{_KG}\s*(?:یا\s*(?:کمتر|سبک\s?تر|زیر|پایین\s?تر)|حداکثر)"),
+    _compile(rf"(?P<n>{NUM})\s*{_KG}\s*(?:یا\s*(?:کمتر|سبک\s?تر|زیر|پایین\s?تر)|حداکثر)"),
 ]
-WEIGHT_MIN = re.compile(rf"(?:حداقل|بیشتر\s+از|سنگین\s?تر\s+از|بالای)\s*(?P<n>{NUM})\s*{_KG}")
-WEIGHT_BAD_UNIT = re.compile(rf"\b{NUM}\s*(?:پوند|اونس|گرم)\b")
+WEIGHT_MIN = _compile(rf"(?:حداقل|بیشتر\s+از|سنگین\s?تر\s+از|بالای)\s*(?P<n>{NUM})\s*{_KG}")
+WEIGHT_BAD_UNIT = _compile(rf"\b{NUM}\s*(?:پوند|اونس|گرم)\b")
 
-IN_STOCK = re.compile(r"\bموجود(?:\s+در\s+انبار)?\b")
-SOFT_PRICE = re.compile(r"\b(?:ارزان(?:\s?قیمت)?|اقتصادی|کم\s?هزینه|ارزان\s?ترین)\b")
+IN_STOCK = _compile(r"\bموجود(?:\s+در\s+انبار)?\b")
+SOFT_PRICE = _compile(r"\b(?:ارزان(?:\s?قیمت)?|اقتصادی|کم\s?هزینه|ارزان\s?ترین)\b")
 CLEAR = [
-    re.compile(
+    _compile(
         r"محدودیت\s*(?P<what>وزن|بودجه|قیمت|رم)\s*(?:را\s*)?(?:فراموش\s*کن|حذف\s*کن|بردار|نادیده\s*بگیر)"
     ),
-    re.compile(r"(?:بدون|بی)\s*محدودیت\s*(?P<what>وزن|بودجه|قیمت|رم)"),
+    _compile(r"(?:بدون|بی)\s*محدودیت\s*(?P<what>وزن|بودجه|قیمت|رم)"),
 ]
 CLEAR_FIELD = {
     "وزن": "max_weight_kg",
@@ -241,7 +247,7 @@ _SUFFIX = r"(?:\s?(?:ها|های|هایی)|ی|ای|ام|م|تان|مان|ش)?"
 _LEFT = r"(?<![؀-ۿ])"
 _RIGHT = r"(?![؀-ۿ])"
 _PATTERNS = {
-    concept: re.compile(
+    concept: _compile(
         _LEFT + "(?:" + "|".join(re.escape(p) for p in sorted(words, key=len, reverse=True)) + ")"
         + _SUFFIX + _RIGHT
     )
