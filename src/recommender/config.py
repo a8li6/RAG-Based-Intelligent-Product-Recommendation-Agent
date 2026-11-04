@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     default_currency: Literal["USD"] = "USD"
     explanation_mode: Literal["llm", "deterministic"] = "deterministic"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    # Abstention cutoff on the best similarity among eligible products. Off by default: a
+    # useful value is specific to the embedder and must be calibrated on a labeled dev set
+    # (see `evaluate --calibrate`), never guessed.
+    min_similarity: float | None = Field(default=None, ge=-1.0, le=1.0, allow_inf_nan=False)
     max_query_chars: int = Field(default=2000, ge=1, le=10_000)
     max_request_bytes: int = Field(default=16_384, ge=1_024, le=1_048_576)
     max_concurrent_requests: int = Field(default=4, ge=1, le=64)

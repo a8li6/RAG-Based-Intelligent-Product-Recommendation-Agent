@@ -196,14 +196,26 @@ def test_structured_filters_are_applied(deps):
     assert set(ids(result)) == {"P001", "P004"}
 
 
-def test_weak_relevance_cutoff_asks_instead_of_guessing(deps, monkeypatch):
-    from recommender import service
-
-    real = service.select_candidates
-    monkeypatch.setattr(service, "select_candidates", lambda c, i, k: real(c, i, k, min_score=2.0))
-    response = ask(deps, "laptop for coding").response
+def test_weak_relevance_cutoff_asks_instead_of_guessing(artifact_dir, embedder):
+    strict = make_deps(
+        artifact_dir, embedder, None, explanation_mode="deterministic", min_similarity=1.0
+    )
+    response = ask(strict, "laptop for coding").response
     assert response.status == "needs_clarification"
     assert "mainly use" in response.clarification_question
+    assert response.recommendations == []
+
+
+def test_the_cutoff_is_off_by_default(deps):
+    assert deps.settings.min_similarity is None
+    assert ask(deps, "laptop for coding").response.status == "ok"
+
+
+def test_a_permissive_cutoff_does_not_change_results(artifact_dir, embedder, deps):
+    loose = make_deps(
+        artifact_dir, embedder, None, explanation_mode="deterministic", min_similarity=-1.0
+    )
+    assert ids(ask(loose, REFERENCE)) == ids(ask(deps, REFERENCE))
 
 
 @pytest.mark.parametrize("bad", ["", "   ", "x" * 2001])

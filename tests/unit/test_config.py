@@ -19,6 +19,7 @@ def test_defaults_are_valid():
     assert s.default_currency == "USD"
     assert s.explanation_mode == "deterministic"
     assert s.embedding_backend == "builtin"
+    assert s.min_similarity is None
     assert s.llm_base_url == "http://127.0.0.1:11434"
 
 
@@ -49,6 +50,8 @@ def test_env_override(monkeypatch):
         {"default_currency": "EUR"},
         {"explanation_mode": "freeform"},
         {"embedding_backend": "remote"},
+        {"min_similarity": 1.5},
+        {"min_similarity": float("nan")},
         {"retrieval_k": 0},
         {"retrieval_k": 1000},
         {"max_recommendations": 4},

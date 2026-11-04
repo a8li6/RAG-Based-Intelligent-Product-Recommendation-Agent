@@ -208,7 +208,7 @@ def recommend(
 
     candidates = deps.retriever.search(intent.semantic_query, eligible)
     t = lap("retrieve", t)
-    selected = select_candidates(candidates, intent, catalog)
+    selected = select_candidates(candidates, intent, catalog, min_score=settings.min_similarity)
     t = lap("select", t)
     if not selected:
         response = respond("needs_clarification", intent, question=RELEVANCE_QUESTION)
