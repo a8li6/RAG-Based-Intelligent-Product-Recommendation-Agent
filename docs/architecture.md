@@ -61,6 +61,7 @@ the catalog, and render the response from canonical values.
 | `documents.py` | deterministic search text per product, token-length check |
 | `embeddings.py` | vector contract and the optional E5 adapter (lazy import) |
 | `local_embedder.py` | the built-in offline embedder and its persisted state |
+| `persian.py` | Persian query normalization (digits, separators, letter variants), Persian constraint phrases and a concept lexicon mapped to the English concept ids (queries only; responses stay English) |
 | `factory.py` | chooses the configured embedder |
 | `index.py` | atomic artifact build, checksummed load, embedder-state restore |
 | `retrieval.py` | exact search restricted to the eligible subset |
