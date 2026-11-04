@@ -1,0 +1,2419 @@
+{
+  "generated_at": "2026-11-04T08:34:34+00:00",
+  "command": "python -m recommender.cli evaluate --calibrate --runs 20 --output reports/eval-dev.json",
+  "split": "dev",
+  "configuration": {
+    "settings": {
+      "catalog_path": "/home/user/rag-based-intelligent-product-recommendation-agent/data/demo/products.jsonl",
+      "artifact_dir": "/tmp/tmp5xmlhfom/index",
+      "embedding_backend": "builtin",
+      "embedding_model": "intfloat/multilingual-e5-small",
+      "embedding_revision": "main",
+      "embedding_device": "cpu",
+      "embedding_batch_size": 32,
+      "llm_base_url": "http://127.0.0.1:11434",
+      "llm_model": "qwen3:4b",
+      "llm_timeout_seconds": 60.0,
+      "retrieval_k": 10,
+      "max_recommendations": 3,
+      "default_currency": "USD",
+      "explanation_mode": "deterministic",
+      "log_level": "INFO",
+      "min_similarity": null,
+      "max_query_chars": 2000,
+      "max_request_bytes": 16384,
+      "max_concurrent_requests": 4,
+      "auto_build_index": true
+    },
+    "retrieval_k": 10,
+    "max_recommendations": 3,
+    "explanation": "deterministic templates (no language model)",
+    "embedder": "builtin-hashed-tfidf-v1",
+    "embedder_revision": "idf-31d8131ea345e958",
+    "document_format_version": "doc-v1",
+    "catalog_file": "products.jsonl",
+    "catalog_sha256": "42a7c29e4095b075de4c0677d36e559644762c84226cee1d12933c0b089c990a",
+    "catalog_size": 60,
+    "index_version": "42a7c29e4095",
+    "eval_set_sha256": "03a6aa6bf717eda4ca354f232b1a289de2bdeae7c1682c984a471c79d3db39f4",
+    "test_labels_sha256": "483dd2d0b5df4bc6aec8d8527eb7761fc467d3122cef2db034ffc6785a3161c7",
+    "random_baseline_draws": 50,
+    "latency_runs_per_query": 20
+  },
+  "summary": {
+    "queries": 20,
+    "positive_queries_with_relevant_eligible": 16,
+    "retrieval": {
+      "builtin": {
+        "recall_at_10": {
+          "mean": 0.566088,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.9375,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.861615,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "keyword": {
+        "recall_at_10": {
+          "mean": 0.499467,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 1.0,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.87372,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "random": {
+        "recall_at_10": {
+          "mean": 0.274071,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.543333,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.308782,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "post_filter": {
+        "recall_at_10": {
+          "mean": 0.493228,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.9375,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.861615,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "oracle_recall_at_10": {
+        "mean": 0.607723,
+        "n": 16,
+        "skipped": 0
+      }
+    },
+    "retrieval_by_category": {
+      "constraints": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.916667,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.843574,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.916667,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "queries": 2
+      },
+      "direct": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.527778,
+            "n": 4,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 4,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 4,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.410256,
+            "n": 4,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 4,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.88268,
+            "n": 4,
+            "skipped": 0
+          }
+        },
+        "queries": 4
+      },
+      "model-name": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "queries": 2
+      },
+      "negation": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.08,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.0,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.08,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.469279,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "queries": 1
+      },
+      "paraphrase": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.338828,
+            "n": 6,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 6,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.849782,
+            "n": 6,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.276557,
+            "n": 6,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 6,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.82992,
+            "n": 6,
+            "skipped": 0
+          }
+        },
+        "queries": 6
+      },
+      "unknown-spec": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.777778,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "queries": 1
+      }
+    },
+    "retrieval_by_lexicon": {
+      "lexicon_hit_expected": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.525126,
+            "n": 13,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.923077,
+            "n": 13,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.847729,
+            "n": 13,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.44609,
+            "n": 13,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 13,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.844578,
+            "n": 13,
+            "skipped": 0
+          }
+        },
+        "queries": 13
+      },
+      "lexicon_miss_expected": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.74359,
+            "n": 3,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 3,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.921787,
+            "n": 3,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.730769,
+            "n": 3,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 3,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 3,
+            "skipped": 0
+          }
+        },
+        "queries": 3
+      }
+    },
+    "system": {
+      "status_accuracy": {
+        "value": 0.9,
+        "numerator": 18,
+        "denominator": 20
+      },
+      "status_accuracy_by_category": {
+        "ambiguous": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        },
+        "constraints": {
+          "value": 1.0,
+          "numerator": 2,
+          "denominator": 2
+        },
+        "direct": {
+          "value": 1.0,
+          "numerator": 4,
+          "denominator": 4
+        },
+        "irrelevant": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 2
+        },
+        "model-name": {
+          "value": 1.0,
+          "numerator": 2,
+          "denominator": 2
+        },
+        "negation": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        },
+        "no-eligible": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        },
+        "paraphrase": {
+          "value": 1.0,
+          "numerator": 6,
+          "denominator": 6
+        },
+        "unknown-spec": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        }
+      },
+      "interpretation_accuracy": {
+        "value": 1.0,
+        "numerator": 17,
+        "denominator": 17
+      },
+      "constraint_violation_rate": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 54
+      },
+      "answer_rate_on_positive_queries": {
+        "value": 1.0,
+        "numerator": 16,
+        "denominator": 16
+      },
+      "false_empty_rate": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 16
+      },
+      "no_match_accuracy": {
+        "value": 1.0,
+        "numerator": 1,
+        "denominator": 1
+      },
+      "clarification_accuracy": {
+        "value": 0.333333,
+        "numerator": 1,
+        "denominator": 3
+      },
+      "abstention_on_irrelevant": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 2
+      },
+      "mrr_at_3": {
+        "mean": 0.9375,
+        "n": 16,
+        "skipped": 0
+      },
+      "ndcg_at_3": {
+        "mean": 0.861615,
+        "n": 16,
+        "skipped": 0
+      },
+      "evidence_validity": {
+        "value": 1.0,
+        "numerator": 756,
+        "denominator": 756
+      },
+      "fallback_rate": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 18
+      }
+    }
+  },
+  "operational": {
+    "cold_first_request_ms": 11.495811,
+    "warm_request_count": 400,
+    "warm_p50_ms": 1.149081,
+    "warm_p95_ms": 1.365639,
+    "stage_mean_ms": {
+      "parse": 0.127005,
+      "filter": 0.035042,
+      "retrieve": 0.314889,
+      "select": 0.031972,
+      "explain": 0.482803,
+      "render": 0.103044
+    },
+    "slowest_stage": "explain",
+    "catalog_build_seconds": 0.04568,
+    "peak_rss_mb": 68.933594,
+    "request_count": 420,
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v233-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "python": "3.11.17",
+      "faiss": "1.15.1"
+    }
+  },
+  "calibration": {
+    "threshold": 0.060328,
+    "balanced_accuracy": 1.0,
+    "tpr": 1.0,
+    "tnr": 1.0,
+    "answer_queries": 16,
+    "abstain_queries": 2,
+    "separable": true,
+    "max_abstain_score": 0.01907,
+    "min_answer_score": 0.101586
+  },
+  "per_query": [
+    {
+      "query_id": "D1",
+      "split": "dev",
+      "category": "direct",
+      "query": "laptop for gaming",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P049",
+        "P053",
+        "P002"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for gaming",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 13,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.514222,
+      "rankings": {
+        "builtin": [
+          "P049",
+          "P053",
+          "P002",
+          "P054",
+          "P048",
+          "P047",
+          "P050",
+          "P052",
+          "P003",
+          "P006"
+        ],
+        "keyword": [
+          "P049",
+          "P002",
+          "P054",
+          "P053",
+          "P048",
+          "P047",
+          "P052",
+          "P050",
+          "P004",
+          "P006"
+        ],
+        "random": [
+          "P019",
+          "P018",
+          "P032",
+          "P014",
+          "P053",
+          "P024",
+          "P052",
+          "P031",
+          "P059",
+          "P048"
+        ],
+        "post_filter": [
+          "P049",
+          "P053",
+          "P002",
+          "P054",
+          "P048",
+          "P047",
+          "P050",
+          "P052"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.615385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.615385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.615385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.16,
+          "mrr_at_3": 0.323333,
+          "ndcg_at_3": 0.157281
+        }
+      },
+      "oracle_recall_at_10": 0.769231
+    },
+    {
+      "query_id": "D4",
+      "split": "dev",
+      "category": "direct",
+      "query": "laptop for programming",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P008",
+        "P006",
+        "P039"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for programming",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 18,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.147964,
+      "rankings": {
+        "builtin": [
+          "P008",
+          "P006",
+          "P039",
+          "P041",
+          "P004",
+          "P001",
+          "P043",
+          "P045",
+          "P046",
+          "P038"
+        ],
+        "keyword": [
+          "P004",
+          "P006",
+          "P008",
+          "P003",
+          "P001",
+          "P005",
+          "P002",
+          "P049",
+          "P045",
+          "P029"
+        ],
+        "random": [
+          "P043",
+          "P038",
+          "P035",
+          "P024",
+          "P032",
+          "P008",
+          "P002",
+          "P059",
+          "P042",
+          "P019"
+        ],
+        "post_filter": [
+          "P008",
+          "P006",
+          "P039",
+          "P041",
+          "P004",
+          "P001",
+          "P043",
+          "P045"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.555556,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.333333,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.444444,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.181111,
+          "mrr_at_3": 0.43,
+          "ndcg_at_3": 0.28756
+        }
+      },
+      "oracle_recall_at_10": 0.555556
+    },
+    {
+      "query_id": "D6",
+      "split": "dev",
+      "category": "direct",
+      "query": "laptop for studying and taking notes in class",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P036",
+        "P034",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for studying and taking notes in class",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.399758,
+      "rankings": {
+        "builtin": [
+          "P036",
+          "P034",
+          "P003",
+          "P031",
+          "P004",
+          "P030",
+          "P035",
+          "P021",
+          "P032",
+          "P041"
+        ],
+        "keyword": [
+          "P036",
+          "P030",
+          "P034",
+          "P004",
+          "P006",
+          "P008",
+          "P003",
+          "P001",
+          "P005",
+          "P002"
+        ],
+        "random": [
+          "P030",
+          "P039",
+          "P018",
+          "P038",
+          "P048",
+          "P026",
+          "P053",
+          "P024",
+          "P015",
+          "P059"
+        ],
+        "post_filter": [
+          "P036",
+          "P034",
+          "P003",
+          "P031",
+          "P004",
+          "P030",
+          "P035",
+          "P021",
+          "P032",
+          "P041"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.384615,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.192308,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.384615,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.195385,
+          "mrr_at_3": 0.603333,
+          "ndcg_at_3": 0.357952
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "D9",
+      "split": "dev",
+      "category": "direct",
+      "query": "lightweight laptop for travel",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P010",
+        "P017",
+        "P043"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "lightweight laptop for travel",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 18,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.229128,
+      "rankings": {
+        "builtin": [
+          "P010",
+          "P017",
+          "P043",
+          "P004",
+          "P057",
+          "P001",
+          "P053",
+          "P009",
+          "P014",
+          "P046"
+        ],
+        "keyword": [
+          "P057",
+          "P010",
+          "P053",
+          "P043",
+          "P017",
+          "P009",
+          "P014",
+          "P016",
+          "P027",
+          "P004"
+        ],
+        "random": [
+          "P053",
+          "P005",
+          "P019",
+          "P059",
+          "P021",
+          "P060",
+          "P042",
+          "P028",
+          "P052",
+          "P049"
+        ],
+        "post_filter": [
+          "P010",
+          "P017",
+          "P043",
+          "P004",
+          "P057",
+          "P001",
+          "P053",
+          "P009",
+          "P014"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.555556,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.5,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.530721
+        },
+        "post_filter": {
+          "recall_at_10": 0.5,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.184444,
+          "mrr_at_3": 0.446667,
+          "ndcg_at_3": 0.150614
+        }
+      },
+      "oracle_recall_at_10": 0.555556
+    },
+    {
+      "query_id": "P1",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "portable laptop for coding and commuting",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P004",
+        "P039",
+        "P001"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "portable laptop for coding and commuting",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.590624,
+      "rankings": {
+        "builtin": [
+          "P004",
+          "P039",
+          "P001",
+          "P046",
+          "P015",
+          "P043",
+          "P017",
+          "P016",
+          "P057",
+          "P006"
+        ],
+        "keyword": [
+          "P039",
+          "P004",
+          "P001",
+          "P046",
+          "P057",
+          "P015",
+          "P006",
+          "P008",
+          "P035",
+          "P032"
+        ],
+        "random": [
+          "P042",
+          "P052",
+          "P012",
+          "P015",
+          "P038",
+          "P029",
+          "P026",
+          "P010",
+          "P027",
+          "P014"
+        ],
+        "post_filter": [
+          "P004",
+          "P039",
+          "P001",
+          "P046",
+          "P015",
+          "P043",
+          "P017",
+          "P016",
+          "P057"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.357143,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.357143,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.321429,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.182143,
+          "mrr_at_3": 0.68,
+          "ndcg_at_3": 0.279926
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P2",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "I write software and ride the train every day, I need something I can carry",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P010",
+        "P015",
+        "P043"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "write software and ride the train every day, something I can carry",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.687148,
+      "lexicon_hit_expected": true,
+      "top_score": 0.121601,
+      "rankings": {
+        "builtin": [
+          "P010",
+          "P015",
+          "P043",
+          "P004",
+          "P001",
+          "P046",
+          "P053",
+          "P038",
+          "P039",
+          "P016"
+        ],
+        "keyword": [
+          "P053",
+          "P038",
+          "P015",
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008"
+        ],
+        "random": [
+          "P012",
+          "P041",
+          "P026",
+          "P010",
+          "P031",
+          "P004",
+          "P022",
+          "P050",
+          "P019",
+          "P005"
+        ],
+        "post_filter": [
+          "P010",
+          "P015",
+          "P043",
+          "P004",
+          "P001",
+          "P046",
+          "P053",
+          "P038",
+          "P039"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.357143,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.687148
+        },
+        "keyword": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.48976
+        },
+        "post_filter": {
+          "recall_at_10": 0.321429,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.687148
+        },
+        "random": {
+          "recall_at_10": 0.2,
+          "mrr_at_3": 0.666667,
+          "ndcg_at_3": 0.251024
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P3",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "a notebook for developers who are always on the move",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P039",
+        "P040",
+        "P045"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "notebook for developers who are always on the move",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.646186,
+      "lexicon_hit_expected": true,
+      "top_score": 0.337905,
+      "rankings": {
+        "builtin": [
+          "P039",
+          "P040",
+          "P045",
+          "P037",
+          "P016",
+          "P015",
+          "P041",
+          "P038",
+          "P043",
+          "P002"
+        ],
+        "keyword": [
+          "P040",
+          "P011",
+          "P016",
+          "P015",
+          "P039",
+          "P057",
+          "P010",
+          "P020",
+          "P049",
+          "P045"
+        ],
+        "random": [
+          "P004",
+          "P055",
+          "P016",
+          "P059",
+          "P027",
+          "P003",
+          "P011",
+          "P036",
+          "P054",
+          "P038"
+        ],
+        "post_filter": [
+          "P039",
+          "P040",
+          "P045",
+          "P037",
+          "P016",
+          "P015",
+          "P041",
+          "P038"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.357143,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.646186
+        },
+        "keyword": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.48976
+        },
+        "post_filter": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.646186
+        },
+        "random": {
+          "recall_at_10": 0.185,
+          "mrr_at_3": 0.643333,
+          "ndcg_at_3": 0.232924
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P7",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "laptop for a college student attending lectures",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P036",
+        "P030",
+        "P011"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for a college student attending lectures",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.243492,
+      "rankings": {
+        "builtin": [
+          "P036",
+          "P030",
+          "P011",
+          "P046",
+          "P015",
+          "P035",
+          "P054",
+          "P031",
+          "P003",
+          "P004"
+        ],
+        "keyword": [
+          "P036",
+          "P011",
+          "P030",
+          "P031",
+          "P035",
+          "P004",
+          "P006",
+          "P008",
+          "P003",
+          "P001"
+        ],
+        "random": [
+          "P031",
+          "P005",
+          "P008",
+          "P036",
+          "P014",
+          "P038",
+          "P002",
+          "P035",
+          "P027",
+          "P020"
+        ],
+        "post_filter": [
+          "P036",
+          "P030",
+          "P011",
+          "P046",
+          "P015",
+          "P035",
+          "P054",
+          "P031",
+          "P003"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.384615,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.269231,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.346154,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.2,
+          "mrr_at_3": 0.733333,
+          "ndcg_at_3": 0.410279
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "P8",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "something for my kid's schoolwork and reading online",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P029",
+        "P015",
+        "P017"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "something for my kid's schoolwork and reading online",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.765361,
+      "lexicon_hit_expected": false,
+      "top_score": 0.101586,
+      "rankings": {
+        "builtin": [
+          "P029",
+          "P015",
+          "P017",
+          "P006",
+          "P011",
+          "P005",
+          "P004",
+          "P041",
+          "P021",
+          "P057"
+        ],
+        "keyword": [
+          "P029",
+          "P024",
+          "P011",
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008"
+        ],
+        "random": [
+          "P056",
+          "P026",
+          "P004",
+          "P022",
+          "P046",
+          "P048",
+          "P047",
+          "P040",
+          "P012",
+          "P060"
+        ],
+        "post_filter": [
+          "P029",
+          "P015",
+          "P017",
+          "P006",
+          "P011",
+          "P005",
+          "P004",
+          "P041",
+          "P021",
+          "P057"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.230769,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "keyword": {
+          "recall_at_10": 0.192308,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.230769,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "random": {
+          "recall_at_10": 0.19,
+          "mrr_at_3": 0.743333,
+          "ndcg_at_3": 0.445028
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "P9",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "a notebook to take to classes and write essays",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P021",
+        "P036",
+        "P012"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "notebook to take to classes and write essays",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.155651,
+      "rankings": {
+        "builtin": [
+          "P021",
+          "P036",
+          "P012",
+          "P035",
+          "P024",
+          "P043",
+          "P015",
+          "P034",
+          "P014",
+          "P018"
+        ],
+        "keyword": [
+          "P015",
+          "P012",
+          "P035",
+          "P049",
+          "P045",
+          "P029",
+          "P054",
+          "P041",
+          "P053",
+          "P024"
+        ],
+        "random": [
+          "P056",
+          "P038",
+          "P024",
+          "P022",
+          "P010",
+          "P012",
+          "P046",
+          "P004",
+          "P031",
+          "P005"
+        ],
+        "post_filter": [
+          "P021",
+          "P036",
+          "P012",
+          "P035",
+          "P024",
+          "P043",
+          "P015",
+          "P034",
+          "P014",
+          "P018"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.346154,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.269231,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.346154,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.177692,
+          "mrr_at_3": 0.616667,
+          "ndcg_at_3": 0.370279
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "E1",
+      "split": "dev",
+      "category": "constraints",
+      "query": "laptop for coding under $900, at least 16 GB RAM, at most 1.5 kg",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P004",
+        "P001",
+        "P046"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for coding",
+        "max_price_cents": 89999,
+        "currency": "USD",
+        "min_ram_gb": 16,
+        "max_weight_kg": 1.5,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 3,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.416449,
+      "rankings": {
+        "builtin": [
+          "P004",
+          "P001",
+          "P046",
+          "P012"
+        ],
+        "keyword": [
+          "P004",
+          "P001",
+          "P046",
+          "P012"
+        ],
+        "random": [
+          "P046",
+          "P004",
+          "P012",
+          "P001"
+        ],
+        "post_filter": [
+          "P004",
+          "P001",
+          "P046"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 0.84,
+          "ndcg_at_3": 0.72715
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "E5",
+      "split": "dev",
+      "category": "constraints",
+      "query": "laptop for office work",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P006",
+        "P019",
+        "P027"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for office work",
+        "max_price_cents": 80000,
+        "currency": "USD",
+        "min_ram_gb": 8,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 12,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.687148,
+      "lexicon_hit_expected": true,
+      "top_score": 0.375302,
+      "rankings": {
+        "builtin": [
+          "P006",
+          "P019",
+          "P027",
+          "P022",
+          "P020",
+          "P018",
+          "P028",
+          "P021",
+          "P008",
+          "P030"
+        ],
+        "keyword": [
+          "P027",
+          "P022",
+          "P019",
+          "P018",
+          "P020",
+          "P030",
+          "P023",
+          "P035",
+          "P006",
+          "P008"
+        ],
+        "random": [
+          "P023",
+          "P031",
+          "P032",
+          "P003",
+          "P019",
+          "P024",
+          "P034",
+          "P006",
+          "P028",
+          "P011"
+        ],
+        "post_filter": [
+          "P006",
+          "P019",
+          "P027",
+          "P022",
+          "P020",
+          "P018"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.833333,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.687148
+        },
+        "keyword": {
+          "recall_at_10": 0.833333,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.5,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.687148
+        },
+        "random": {
+          "recall_at_10": 0.518333,
+          "mrr_at_3": 0.746667,
+          "ndcg_at_3": 0.458881
+        }
+      },
+      "oracle_recall_at_10": 0.833333
+    },
+    {
+      "query_id": "M1",
+      "split": "dev",
+      "category": "model-name",
+      "query": "Atlas Air 14",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P015",
+        "P046"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "Atlas Air 14",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 1,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": false,
+      "top_score": 0.3619,
+      "rankings": {
+        "builtin": [
+          "P001",
+          "P015",
+          "P046",
+          "P012",
+          "P016",
+          "P010",
+          "P036",
+          "P003",
+          "P024",
+          "P030"
+        ],
+        "keyword": [
+          "P001",
+          "P015",
+          "P010",
+          "P012",
+          "P016",
+          "P003",
+          "P045",
+          "P029",
+          "P053",
+          "P024"
+        ],
+        "random": [
+          "P045",
+          "P009",
+          "P028",
+          "P032",
+          "P015",
+          "P029",
+          "P027",
+          "P055",
+          "P020",
+          "P059"
+        ],
+        "post_filter": [
+          "P001",
+          "P015",
+          "P046",
+          "P012",
+          "P016",
+          "P010",
+          "P036",
+          "P003",
+          "P024"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.24,
+          "mrr_at_3": 0.05,
+          "ndcg_at_3": 0.052619
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "M2",
+      "split": "dev",
+      "category": "model-name",
+      "query": "Forge Pro 15",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P002",
+        "P035",
+        "P037"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "Forge Pro 15",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 1,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": false,
+      "top_score": 0.369299,
+      "rankings": {
+        "builtin": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P019",
+          "P018",
+          "P006",
+          "P008",
+          "P017",
+          "P056"
+        ],
+        "keyword": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P018",
+          "P019",
+          "P006",
+          "P008",
+          "P049",
+          "P041"
+        ],
+        "random": [
+          "P035",
+          "P002",
+          "P031",
+          "P011",
+          "P026",
+          "P024",
+          "P042",
+          "P015",
+          "P038",
+          "P036"
+        ],
+        "post_filter": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P019",
+          "P018",
+          "P006",
+          "P008",
+          "P017"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.24,
+          "mrr_at_3": 0.026667,
+          "ndcg_at_3": 0.04
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "U1",
+      "split": "dev",
+      "category": "unknown-spec",
+      "query": "laptop for development, at most 1.6 kg",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P039",
+        "P037",
+        "P016"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for development",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": 1.6,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 9,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.452752,
+      "rankings": {
+        "builtin": [
+          "P039",
+          "P037",
+          "P016",
+          "P043",
+          "P041",
+          "P001",
+          "P004",
+          "P046",
+          "P015",
+          "P003"
+        ],
+        "keyword": [
+          "P039",
+          "P041",
+          "P043",
+          "P037",
+          "P016",
+          "P004",
+          "P003",
+          "P001",
+          "P029",
+          "P024"
+        ],
+        "random": [
+          "P039",
+          "P046",
+          "P015",
+          "P010",
+          "P001",
+          "P018",
+          "P029",
+          "P028",
+          "P004",
+          "P017"
+        ],
+        "post_filter": [
+          "P039",
+          "P037",
+          "P016",
+          "P043",
+          "P041"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 0.777778,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 0.555556,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.342222,
+          "mrr_at_3": 0.516667,
+          "ndcg_at_3": 0.329386
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "N1",
+      "split": "dev",
+      "category": "no-eligible",
+      "query": "laptop under $300",
+      "expected_status": "no_match",
+      "status": "no_match",
+      "returned": [],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop",
+        "max_price_cents": 29999,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 0,
+      "claims_valid": 0,
+      "explanation_mode": "deterministic",
+      "fallback_reason": null,
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": true
+    },
+    {
+      "query_id": "A1",
+      "split": "dev",
+      "category": "ambiguous",
+      "query": "something cheap",
+      "expected_status": "needs_clarification",
+      "status": "needs_clarification",
+      "returned": [],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "something cheap",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 0,
+      "claims_valid": 0,
+      "explanation_mode": "deterministic",
+      "fallback_reason": null,
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": true
+    },
+    {
+      "query_id": "I1",
+      "split": "dev",
+      "category": "irrelevant",
+      "query": "banana smoothie recipe",
+      "expected_status": "needs_clarification",
+      "status": "ok",
+      "returned": [
+        "P029",
+        "P038",
+        "P011"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "banana smoothie recipe",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": false,
+      "top_score": 0.016615,
+      "rankings": {
+        "builtin": [
+          "P029",
+          "P038",
+          "P011",
+          "P055",
+          "P030",
+          "P056",
+          "P042",
+          "P024",
+          "P006",
+          "P048"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P055",
+          "P003",
+          "P060",
+          "P020",
+          "P047",
+          "P037",
+          "P036",
+          "P024",
+          "P005",
+          "P004"
+        ],
+        "post_filter": [
+          "P029",
+          "P038",
+          "P011",
+          "P055",
+          "P030",
+          "P056",
+          "P042",
+          "P024",
+          "P006"
+        ]
+      }
+    },
+    {
+      "query_id": "I2",
+      "split": "dev",
+      "category": "irrelevant",
+      "query": "what is the weather in Paris tomorrow",
+      "expected_status": "needs_clarification",
+      "status": "ok",
+      "returned": [
+        "P038",
+        "P027",
+        "P042"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "what is the weather in Paris tomorrow",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": false,
+      "top_score": 0.01907,
+      "rankings": {
+        "builtin": [
+          "P038",
+          "P027",
+          "P042",
+          "P037",
+          "P021",
+          "P010",
+          "P017",
+          "P009",
+          "P028",
+          "P034"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P049",
+          "P008",
+          "P001",
+          "P045",
+          "P034",
+          "P028",
+          "P030",
+          "P036",
+          "P019",
+          "P059"
+        ],
+        "post_filter": [
+          "P038",
+          "P027",
+          "P042",
+          "P037",
+          "P021",
+          "P010",
+          "P017",
+          "P009",
+          "P028",
+          "P034"
+        ]
+      }
+    },
+    {
+      "query_id": "G1",
+      "split": "dev",
+      "category": "negation",
+      "query": "laptop for study, not for gaming",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P054",
+        "P049",
+        "P053"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "laptop for study, not for gaming",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 25,
+      "system_mrr_at_3": 0.0,
+      "system_ndcg_at_3": 0.0,
+      "lexicon_hit_expected": true,
+      "top_score": 0.516264,
+      "rankings": {
+        "builtin": [
+          "P054",
+          "P049",
+          "P053",
+          "P002",
+          "P048",
+          "P047",
+          "P050",
+          "P052",
+          "P003",
+          "P031"
+        ],
+        "keyword": [
+          "P031",
+          "P054",
+          "P045",
+          "P060",
+          "P059",
+          "P049",
+          "P002",
+          "P053",
+          "P048",
+          "P047"
+        ],
+        "random": [
+          "P004",
+          "P021",
+          "P032",
+          "P031",
+          "P034",
+          "P020",
+          "P017",
+          "P016",
+          "P052",
+          "P038"
+        ],
+        "post_filter": [
+          "P054",
+          "P049",
+          "P053",
+          "P002",
+          "P048",
+          "P047",
+          "P050",
+          "P052",
+          "P003"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.08,
+          "mrr_at_3": 0.0,
+          "ndcg_at_3": 0.0
+        },
+        "keyword": {
+          "recall_at_10": 0.08,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.469279
+        },
+        "post_filter": {
+          "recall_at_10": 0.04,
+          "mrr_at_3": 0.0,
+          "ndcg_at_3": 0.0
+        },
+        "random": {
+          "recall_at_10": 0.1888,
+          "mrr_at_3": 0.626667,
+          "ndcg_at_3": 0.389608
+        }
+      },
+      "oracle_recall_at_10": 0.4
+    }
+  ]
+}
