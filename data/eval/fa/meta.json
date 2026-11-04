@@ -1,0 +1,18 @@
+{
+  "authorship": "The Persian query texts were written by an AI assistant and have NOT been reviewed by a native Persian speaker.",
+  "catalog_file": "data/demo/products.jsonl",
+  "catalog_sha256": "42a7c29e4095b075de4c0677d36e559644762c84226cee1d12933c0b089c990a",
+  "grades": "2 = strong, 1 = partial, 0 = irrelevant (omitted from relevance)",
+  "labeling": "Rule-based on the English catalog's tags and specifications. Single author; no second human review.",
+  "language": "fa",
+  "parallel_to": "data/eval/queries.jsonl (same ids, splits, constraints and relevance rules)",
+  "query_count": 60,
+  "reviewed_by_native_speaker": false,
+  "scope": "Persian QUERY understanding over the English catalog; responses remain English.",
+  "split_policy": "Same split as the English set. Test labels are frozen before any Persian support is built.",
+  "splits": {
+    "dev": 20,
+    "test": 40
+  },
+  "test_labels_sha256": "5a5c688a7c340df13c9e7f293e01477c6e97356a481885d3a7bd0ffc8b528356"
+}
