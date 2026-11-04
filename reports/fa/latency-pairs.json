@@ -1,0 +1,372 @@
+{
+  "method": "per-query median of 60 warm calls (5 warm-up), in-process, answerable queries only",
+  "hardware": "Linux-6.18.44-fc-v233-x86_64-with-glibc2.39 / Python 3.11.17",
+  "pairs": 46,
+  "persian_median_ms": 1.4852447501425559,
+  "english_median_ms": 1.1597387499477918,
+  "ratio_median": 1.3601390098479245,
+  "ratio_q1": 1.2276933288688137,
+  "ratio_q3": 1.5386063306641793,
+  "per_query": [
+    {
+      "query_id": "A1",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.08766199994170165,
+      "english_ms": 0.058487000160312164
+    },
+    {
+      "query_id": "A2",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.09555199994792929,
+      "english_ms": 0.06004300007589336
+    },
+    {
+      "query_id": "A3",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.11302149982839182,
+      "english_ms": 0.07027950005067396
+    },
+    {
+      "query_id": "A4",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.11129650010843761,
+      "english_ms": 0.06581549996553804
+    },
+    {
+      "query_id": "C1",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.10528300003898039,
+      "english_ms": 0.061058499795763055
+    },
+    {
+      "query_id": "C2",
+      "expected_status": "needs_clarification",
+      "persian_ms": 0.14988299994911358,
+      "english_ms": 0.0932779998947808
+    },
+    {
+      "query_id": "D1",
+      "expected_status": "ok",
+      "persian_ms": 0.9197255001254234,
+      "english_ms": 1.1068285000419564
+    },
+    {
+      "query_id": "D2",
+      "expected_status": "ok",
+      "persian_ms": 1.8877914999393397,
+      "english_ms": 1.2505265001436783
+    },
+    {
+      "query_id": "D3",
+      "expected_status": "ok",
+      "persian_ms": 1.145504999840341,
+      "english_ms": 1.280715500115548
+    },
+    {
+      "query_id": "D4",
+      "expected_status": "ok",
+      "persian_ms": 1.5750659999866912,
+      "english_ms": 0.7763544999761507
+    },
+    {
+      "query_id": "D5",
+      "expected_status": "ok",
+      "persian_ms": 1.8040064999240712,
+      "english_ms": 1.4098529998136655
+    },
+    {
+      "query_id": "D6",
+      "expected_status": "ok",
+      "persian_ms": 1.912029999857623,
+      "english_ms": 1.4535875002366083
+    },
+    {
+      "query_id": "D7",
+      "expected_status": "ok",
+      "persian_ms": 1.60394249996898,
+      "english_ms": 1.2033344999053952
+    },
+    {
+      "query_id": "D8",
+      "expected_status": "ok",
+      "persian_ms": 1.544332000094073,
+      "english_ms": 1.2422615002378734
+    },
+    {
+      "query_id": "D9",
+      "expected_status": "ok",
+      "persian_ms": 1.4837375001661712,
+      "english_ms": 1.1757325000871788
+    },
+    {
+      "query_id": "D10",
+      "expected_status": "ok",
+      "persian_ms": 1.5346385000611917,
+      "english_ms": 1.148037000120894
+    },
+    {
+      "query_id": "E1",
+      "expected_status": "ok",
+      "persian_ms": 1.6844604999732837,
+      "english_ms": 1.1780664999605506
+    },
+    {
+      "query_id": "E2",
+      "expected_status": "ok",
+      "persian_ms": 1.4867520001189405,
+      "english_ms": 1.134442999955354
+    },
+    {
+      "query_id": "E3",
+      "expected_status": "ok",
+      "persian_ms": 1.1525785000685573,
+      "english_ms": 0.7389974998659454
+    },
+    {
+      "query_id": "E4",
+      "expected_status": "ok",
+      "persian_ms": 1.3655489999564452,
+      "english_ms": 1.2705525000455964
+    },
+    {
+      "query_id": "E5",
+      "expected_status": "ok",
+      "persian_ms": 1.507355500052654,
+      "english_ms": 1.225490999786416
+    },
+    {
+      "query_id": "E6",
+      "expected_status": "ok",
+      "persian_ms": 1.578982500177517,
+      "english_ms": 0.8739359998344298
+    },
+    {
+      "query_id": "E7",
+      "expected_status": "ok",
+      "persian_ms": 1.4405844999600959,
+      "english_ms": 0.8871769998677337
+    },
+    {
+      "query_id": "E8",
+      "expected_status": "ok",
+      "persian_ms": 1.5171899999586458,
+      "english_ms": 1.242814499846645
+    },
+    {
+      "query_id": "G1",
+      "expected_status": "ok",
+      "persian_ms": 1.3167765000616782,
+      "english_ms": 0.9024604999012809
+    },
+    {
+      "query_id": "G2",
+      "expected_status": "ok",
+      "persian_ms": 1.4168940001582087,
+      "english_ms": 0.9993200001190417
+    },
+    {
+      "query_id": "G3",
+      "expected_status": "ok",
+      "persian_ms": 1.409410999940519,
+      "english_ms": 1.0314075000223966
+    },
+    {
+      "query_id": "I1",
+      "expected_status": "needs_clarification",
+      "persian_ms": 1.1182389998793951,
+      "english_ms": 0.8337424999353971
+    },
+    {
+      "query_id": "I2",
+      "expected_status": "needs_clarification",
+      "persian_ms": 1.0500660000616335,
+      "english_ms": 0.9096434998809855
+    },
+    {
+      "query_id": "I3",
+      "expected_status": "needs_clarification",
+      "persian_ms": 1.07506350013864,
+      "english_ms": 0.9317475000898412
+    },
+    {
+      "query_id": "I4",
+      "expected_status": "needs_clarification",
+      "persian_ms": 1.1982069997884537,
+      "english_ms": 0.9620895000352903
+    },
+    {
+      "query_id": "M1",
+      "expected_status": "ok",
+      "persian_ms": 0.9659140000621846,
+      "english_ms": 0.8414539997829706
+    },
+    {
+      "query_id": "M2",
+      "expected_status": "ok",
+      "persian_ms": 1.2074044998371392,
+      "english_ms": 0.9542800000872376
+    },
+    {
+      "query_id": "M3",
+      "expected_status": "ok",
+      "persian_ms": 0.953407499991954,
+      "english_ms": 0.8822409999993397
+    },
+    {
+      "query_id": "M4",
+      "expected_status": "ok",
+      "persian_ms": 1.213667499996518,
+      "english_ms": 1.3393619999533257
+    },
+    {
+      "query_id": "M5",
+      "expected_status": "ok",
+      "persian_ms": 1.4346995001233154,
+      "english_ms": 1.3382475001435523
+    },
+    {
+      "query_id": "M6",
+      "expected_status": "ok",
+      "persian_ms": 1.4243475000057515,
+      "english_ms": 1.3221500000781816
+    },
+    {
+      "query_id": "N1",
+      "expected_status": "no_match",
+      "persian_ms": 0.45733100000688864,
+      "english_ms": 0.36055900000064867
+    },
+    {
+      "query_id": "N2",
+      "expected_status": "no_match",
+      "persian_ms": 0.6854329999441688,
+      "english_ms": 0.5605375001778157
+    },
+    {
+      "query_id": "N3",
+      "expected_status": "no_match",
+      "persian_ms": 0.5413150001913891,
+      "english_ms": 0.40227099998446647
+    },
+    {
+      "query_id": "N4",
+      "expected_status": "no_match",
+      "persian_ms": 0.4937739997785684,
+      "english_ms": 0.3923079998457979
+    },
+    {
+      "query_id": "P1",
+      "expected_status": "ok",
+      "persian_ms": 2.335066500108951,
+      "english_ms": 1.5776180002831097
+    },
+    {
+      "query_id": "P2",
+      "expected_status": "ok",
+      "persian_ms": 2.914025499876516,
+      "english_ms": 1.9073274997936096
+    },
+    {
+      "query_id": "P3",
+      "expected_status": "ok",
+      "persian_ms": 2.4507849998371967,
+      "english_ms": 1.8103204997714784
+    },
+    {
+      "query_id": "P4",
+      "expected_status": "ok",
+      "persian_ms": 2.178065499947479,
+      "english_ms": 1.4899740001510509
+    },
+    {
+      "query_id": "P5",
+      "expected_status": "ok",
+      "persian_ms": 2.489782000111518,
+      "english_ms": 1.5496624998831976
+    },
+    {
+      "query_id": "P6",
+      "expected_status": "ok",
+      "persian_ms": 1.2874725000528997,
+      "english_ms": 0.8589685000970348
+    },
+    {
+      "query_id": "P7",
+      "expected_status": "ok",
+      "persian_ms": 1.3968670000394923,
+      "english_ms": 0.9382680002545385
+    },
+    {
+      "query_id": "P8",
+      "expected_status": "ok",
+      "persian_ms": 1.4063574999454431,
+      "english_ms": 0.8132284999646799
+    },
+    {
+      "query_id": "P9",
+      "expected_status": "ok",
+      "persian_ms": 1.299609999932727,
+      "english_ms": 1.182758499908232
+    },
+    {
+      "query_id": "P10",
+      "expected_status": "ok",
+      "persian_ms": 1.8378459999439656,
+      "english_ms": 1.1573785000109638
+    },
+    {
+      "query_id": "P11",
+      "expected_status": "ok",
+      "persian_ms": 2.0194804999391636,
+      "english_ms": 1.2607885000761598
+    },
+    {
+      "query_id": "P12",
+      "expected_status": "ok",
+      "persian_ms": 1.8978385000991693,
+      "english_ms": 1.1620989998846198
+    },
+    {
+      "query_id": "U1",
+      "expected_status": "ok",
+      "persian_ms": 1.1864704997606168,
+      "english_ms": 0.8289505001357611
+    },
+    {
+      "query_id": "U2",
+      "expected_status": "ok",
+      "persian_ms": 1.1734894999335665,
+      "english_ms": 0.8760329999404348
+    },
+    {
+      "query_id": "U3",
+      "expected_status": "ok",
+      "persian_ms": 1.178190500013443,
+      "english_ms": 0.9038844998485729
+    },
+    {
+      "query_id": "U4",
+      "expected_status": "ok",
+      "persian_ms": 1.0387805000391381,
+      "english_ms": 0.8521664999534551
+    },
+    {
+      "query_id": "X1",
+      "expected_status": "ok",
+      "persian_ms": 2.0130699999754142,
+      "english_ms": 1.3143649998710316
+    },
+    {
+      "query_id": "X2",
+      "expected_status": "ok",
+      "persian_ms": 1.8442699999923207,
+      "english_ms": 1.1101999998572865
+    },
+    {
+      "query_id": "X3",
+      "expected_status": "ok",
+      "persian_ms": 1.9931434999307385,
+      "english_ms": 1.1505429999942862
+    }
+  ]
+}
