@@ -32,11 +32,12 @@ from pathlib import Path
 
 import faiss
 
+from recommender import persian
 from recommender.catalog import Catalog, is_eligible, load_catalog
 from recommender.config import IsolatedSettings
 from recommender.documents import DOCUMENT_FORMAT_VERSION, catalog_documents
 from recommender.index import build_artifacts
-from recommender.local_embedder import LocalEmbedder, tokenize
+from recommender.local_embedder import LocalEmbedder, concepts_of, tokenize
 from recommender.metrics import (
     mean_and_count,
     mrr_at_k,
@@ -219,6 +220,15 @@ def _interpretation_ok(response: RecommendationResponse, constraints: dict) -> b
     )
 
 
+def _lexicon_hit(rec: dict) -> bool:
+    """Does the query use a word the lexicon knows? Authored for English, measured for Persian."""
+    flag = rec["lexicon_hit_expected"]
+    if flag is not None:
+        return flag
+    text = rec["query"]
+    return bool(concepts_of(text) or persian.translate(text))
+
+
 def _semantic_query(rec: dict) -> str:
     """The text the retriever would embed (constraint phrases removed by the parser)."""
     intent = parse_and_merge(
@@ -332,7 +342,7 @@ def evaluate_records(
             "relevant_eligible": len(relevant),
             "system_mrr_at_3": mrr_at_k(returned, relevant, 3),
             "system_ndcg_at_3": ndcg_at_k(returned, rec["relevance"], rec["eligible_ids"], 3),
-            "lexicon_hit_expected": rec["lexicon_hit_expected"],
+            "lexicon_hit_expected": _lexicon_hit(rec),
         }
         if rec["expected_status"] == "ok" or rec["category"] == "irrelevant":
             rankings, top_score = _rank_all(rec, deps, bm25)

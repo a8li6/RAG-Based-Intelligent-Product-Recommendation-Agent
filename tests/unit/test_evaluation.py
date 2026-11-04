@@ -281,3 +281,13 @@ def test_queries_without_relevant_items_are_excluded_and_counted():
     summary = aggregate(rows)
     assert summary["positive_queries_with_relevant_eligible"] == 1
     assert summary["retrieval"]["builtin"]["recall_at_10"]["n"] == 1
+
+
+def test_lexicon_hit_is_authored_for_english_and_measured_for_persian():
+    from recommender.evaluation import _lexicon_hit
+
+    assert _lexicon_hit({"lexicon_hit_expected": True, "query": "zzz"}) is True
+    assert _lexicon_hit({"lexicon_hit_expected": False, "query": "laptop for coding"}) is False
+    assert _lexicon_hit({"lexicon_hit_expected": None, "query": "لپ‌تاپ برای بازی"}) is True
+    assert _lexicon_hit({"lexicon_hit_expected": None, "query": "دستور پخت اسموتی موز"}) is False
+    assert _lexicon_hit({"lexicon_hit_expected": None, "query": "laptop for coding"}) is True
