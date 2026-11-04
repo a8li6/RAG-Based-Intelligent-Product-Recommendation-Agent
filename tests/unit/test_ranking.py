@@ -84,12 +84,31 @@ def test_abstention_cutoff_is_optional_and_off_by_default(catalog):
 # --- use-case matching ---------------------------------------------------------------
 
 
-def test_use_case_matching_uses_exact_words():
+def test_use_case_matching_by_exact_words():
     uc = ["coding", "commuting", "office work", "3D work"]
-    assert matching_use_cases(uc, "laptop for coding and travel") == ["coding"]
+    assert matching_use_cases(uc, "laptop for coding and gaming") == ["coding"]
     assert matching_use_cases(uc, "office work and 3d work") == ["office work", "3D work"]
-    assert matching_use_cases(uc, "I want to code") == []  # no stemming, no guessing
+
+
+def test_use_case_matching_by_curated_concept():
+    uc = ["coding", "commuting", "office work", "3D work", "gaming"]
+    assert matching_use_cases(uc, "Python development") == ["coding"]
+    assert matching_use_cases(uc, "I want to code") == ["coding"]
+    assert matching_use_cases(uc, "something portable for travel") == ["commuting"]
+    assert matching_use_cases(uc, "video editing and rendering") == ["3D work"]
+
+
+def test_generic_words_and_unknown_concepts_do_not_match():
+    uc = ["coding", "commuting", "office work", "3D work"]
     assert matching_use_cases(uc, "work") == []
+    assert matching_use_cases(uc, "banana smoothie recipe") == []
+    assert matching_use_cases(uc, "laptop") == []
+
+
+def test_a_use_case_needs_all_of_its_concepts_covered():
+    # "3D work" is creative-only; an office request must not match it through "work".
+    assert matching_use_cases(["3D work"], "office work") == []
+    assert matching_use_cases(["office work"], "3d work") == []
 
 
 # --- evidence ------------------------------------------------------------------------

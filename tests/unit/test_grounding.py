@@ -260,7 +260,7 @@ def test_rendered_facts_come_from_the_catalog(catalog):
     assert first.attributes["weight_kg"] == 1.3
     assert first.reasons == [
         "Weighs 1.30 kg, within your limit of 1.5 kg.",
-        "The catalog lists these matching use cases: coding.",
+        "The catalog lists use cases related to your request: coding.",
     ]
     assert first.evidence_refs == ["P001.weight_kg", "P001.use_cases"]
     assert items[1].reasons == ["Priced at 699.00 USD, within your maximum of 899.99 USD."]

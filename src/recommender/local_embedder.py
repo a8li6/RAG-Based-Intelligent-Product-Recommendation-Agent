@@ -140,7 +140,6 @@ CONCEPTS: dict[str, tuple[str, ...]] = {
     ],
     "concept_office": [
         "office",
-        "work",
         "business",
         "spreadsheet",
         "email",
@@ -169,6 +168,13 @@ _CONCEPT_OF: dict[str, list[str]] = {}
 for _concept, _words in CONCEPTS.items():
     for _word in _words:
         _CONCEPT_OF.setdefault(stem(_word), []).append(_concept)
+
+
+def concepts_of(text: str) -> frozenset[str]:
+    """Concept tokens triggered by the words of a text (curated lexicon only)."""
+    return frozenset(
+        concept for word in tokenize(text) for concept in _CONCEPT_OF.get(stem(word), ())
+    )
 
 
 def tokenize(text: str) -> list[str]:

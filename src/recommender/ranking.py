@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 
 from recommender.catalog import Catalog, is_eligible
+from recommender.local_embedder import concepts_of
 from recommender.query import QueryIntent
 from recommender.retrieval import Candidate
 from recommender.schemas import EvidenceRecord, Product, ReasonCode
@@ -64,9 +65,21 @@ def _tokens(text: str) -> set[str]:
 
 
 def matching_use_cases(use_cases: list[str], semantic_query: str) -> list[str]:
-    """Catalog use cases whose every word appears in the request (exact words, no stemming)."""
+    """Catalog use cases related to the request. The value shown is always the catalog's own.
+
+    A use case matches when every one of its words appears in the request, or when every
+    concept it triggers (curated lexicon, e.g. "coding" ~ "Python development") is also
+    triggered by the request. Generic words alone ("work") trigger no concept.
+    """
     query_tokens = _tokens(semantic_query)
-    return [uc for uc in use_cases if (tokens := _tokens(uc)) and tokens <= query_tokens]
+    query_concepts = concepts_of(semantic_query)
+    matched = []
+    for use_case in use_cases:
+        words = _tokens(use_case)
+        concepts = concepts_of(use_case)
+        if (words and words <= query_tokens) or (concepts and concepts <= query_concepts):
+            matched.append(use_case)
+    return matched
 
 
 def _codes(*conditional: tuple[bool, ReasonCode]) -> tuple[ReasonCode, ...]:

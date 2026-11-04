@@ -166,7 +166,7 @@ def render_reason(reason: PlanReason, record: EvidenceRecord, intent: QueryInten
         return "Marked in stock in this catalog snapshot."
     if reason.code == "use_case_match":
         matches = matching_use_cases(list(value), intent.semantic_query)  # type: ignore[arg-type]
-        return f"The catalog lists these matching use cases: {', '.join(matches)}."
+        return f"The catalog lists use cases related to your request: {', '.join(matches)}."
     return f"The catalog lists {FIELD_LABELS[record.field]}: {_fact_text(record)}."
 
 
