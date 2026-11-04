@@ -11,8 +11,8 @@ from dataclasses import dataclass
 import faiss
 import numpy as np
 
-from recommender.embeddings import Embedder
-from recommender.index import Artifacts, ensure_embedder_matches
+from recommender.embeddings import Embedder, EmbeddingError
+from recommender.index import ArtifactError, Artifacts, ensure_embedder_matches
 from recommender.schemas import Constraints
 
 
@@ -59,6 +59,13 @@ class Retriever:
     """Embeds a query once and searches the eligible subset of a loaded artifact set."""
 
     def __init__(self, artifacts: Artifacts, embedder: Embedder, retrieval_k: int = 10):
+        if artifacts.embedder_state and hasattr(embedder, "load_state"):
+            try:  # data-dependent embedders restore what they learned at build time
+                embedder.load_state(artifacts.embedder_state)
+            except EmbeddingError as exc:
+                raise ArtifactError(
+                    f"embedder state is invalid ({exc}); rebuild the artifacts"
+                ) from exc
         ensure_embedder_matches(artifacts, embedder)
         if retrieval_k < 1:
             raise ValueError("retrieval_k must be positive")

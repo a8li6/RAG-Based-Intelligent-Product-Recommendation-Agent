@@ -13,7 +13,7 @@ import re
 import shutil
 import time
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from importlib import metadata
 from pathlib import Path
@@ -61,6 +61,7 @@ class Artifacts:
     vectors: np.ndarray
     index: faiss.Index
     manifest: dict
+    embedder_state: dict[str, bytes] = field(default_factory=dict)
 
     @property
     def version(self) -> str:
@@ -94,8 +95,11 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
         if count_tokens is not None:  # fail fast, before embedding anything
             limit = getattr(embedder, "max_tokens", DEFAULT_MAX_TOKENS)
             token_stats = check_document_lengths(catalog, count_tokens, limit)
+        documents = catalog_documents(catalog)
+        if hasattr(embedder, "fit"):  # data-dependent embedders learn from the catalog
+            embedder.fit(documents)
         embed_started = time.perf_counter()
-        vectors = embedder.encode_products(catalog_documents(catalog))
+        vectors = embedder.encode_products(documents)
         embed_seconds = time.perf_counter() - embed_started
         validate_vectors(vectors, expected_rows=len(catalog))
 
@@ -105,6 +109,9 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
         np.save(tmp / VECTORS_FILE, vectors, allow_pickle=False)
         (tmp / IDS_FILE).write_text(json.dumps(catalog.product_ids), encoding="utf-8")
         (tmp / CATALOG_FILE).write_bytes(catalog.canonical_bytes())
+        state_files = embedder.state_files() if hasattr(embedder, "state_files") else {}
+        for name, data in state_files.items():
+            (tmp / name).write_bytes(data)
 
         manifest = {
             "schema_version": SCHEMA_VERSION,
@@ -113,7 +120,8 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
             "vector_dim": int(vectors.shape[1]),
             "embedding_model": embedder.model_id,
             "embedding_revision": embedder.revision,
-            "revision_pinned": is_pinned_revision(embedder.revision),
+            "revision_pinned": getattr(embedder, "pinned", is_pinned_revision(embedder.revision)),
+            "embedder_state_files": sorted(state_files),
             "passage_prefix": PASSAGE_PREFIX,
             "query_prefix": QUERY_PREFIX,
             "normalized": True,
@@ -121,7 +129,10 @@ def build_artifacts(catalog: Catalog, embedder: Embedder, target_dir: str | Path
             "document_tokens": token_stats,
             "built_at": datetime.now(UTC).isoformat(),
             "dependencies": _dependency_versions(),
-            "files": {name: _sha256_file(tmp / name) for name in CHECKSUMMED_FILES},
+            "files": {
+                name: _sha256_file(tmp / name)
+                for name in (*CHECKSUMMED_FILES, *sorted(state_files))
+            },
         }
         manifest["embed_seconds"] = round(embed_seconds, 4)
         manifest["build_seconds"] = round(time.perf_counter() - started, 4)
@@ -157,7 +168,8 @@ def load_artifacts(directory: str | Path) -> Artifacts:
     if manifest.get("schema_version") != SCHEMA_VERSION:
         raise ArtifactError(f"unsupported manifest schema version; {rebuild}")
 
-    for name in CHECKSUMMED_FILES:
+    state_names = list(manifest.get("embedder_state_files", []))
+    for name in (*CHECKSUMMED_FILES, *state_names):
         path = root / name
         if not path.is_file():
             raise ArtifactError(f"{name} missing in {root}; {rebuild}")
@@ -186,7 +198,14 @@ def load_artifacts(directory: str | Path) -> Artifacts:
     if not np.allclose(index.reconstruct_n(0, index.ntotal), vectors, atol=1e-6):
         raise ArtifactError(f"FAISS index does not match the stored vectors; {rebuild}")
 
-    return Artifacts(catalog=catalog, vectors=vectors, index=index, manifest=manifest)
+    embedder_state = {name: (root / name).read_bytes() for name in state_names}
+    return Artifacts(
+        catalog=catalog,
+        vectors=vectors,
+        index=index,
+        manifest=manifest,
+        embedder_state=embedder_state,
+    )
 
 
 def ensure_embedder_matches(artifacts: Artifacts, embedder: Embedder) -> None:

@@ -11,8 +11,9 @@ from pathlib import Path
 from recommender.catalog import CatalogValidationError, catalog_report, load_catalog
 from recommender.config import ConfigError, Settings, load_settings
 from recommender.embeddings import E5Embedder, Embedder
-from recommender.index import ArtifactError, build_artifacts, is_pinned_revision, load_artifacts
+from recommender.index import ArtifactError, build_artifacts, load_artifacts
 from recommender.llm import Explainer
+from recommender.local_embedder import LocalEmbedder
 from recommender.query import InvalidQueryError
 from recommender.retrieval import Retriever
 from recommender.schemas import Constraints, Filters, RecommendationRequest
@@ -22,6 +23,8 @@ EmbedderFactory = Callable[[Settings], Embedder]
 
 
 def default_embedder_factory(settings: Settings) -> Embedder:
+    if settings.embedding_backend == "builtin":
+        return LocalEmbedder()
     return E5Embedder(
         settings.embedding_model,
         settings.embedding_revision,
@@ -95,7 +98,7 @@ def cmd_build_index(
         print(f"build failed: {exc}", file=sys.stderr)
         return 1
     manifest = json.loads((built / "manifest.json").read_text(encoding="utf-8"))
-    if not is_pinned_revision(manifest["embedding_revision"]):
+    if not manifest["revision_pinned"]:
         print(
             f"warning: embedding revision '{manifest['embedding_revision']}' is not an immutable "
             "commit hash, so this build is not reproducible; pin EMBEDDING_REVISION before any "
