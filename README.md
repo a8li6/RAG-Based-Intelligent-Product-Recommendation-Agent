@@ -119,6 +119,30 @@ development and test splits), and there are no confidence intervals. Full tables
 (the abstention cutoff was calibrated on the development split only), per-category results and
 failure cases are in [docs/evaluation.md](docs/evaluation.md); raw per-query outputs are in `reports/`.
 
+## Persian queries (prototype)
+
+Persian requests are understood over the English catalog: Persian and Arabic digits and separators,
+Persian constraint phrases ("زیر ۹۰۰ دلار", "حداقل ۱۶ گیگ رم", "حداکثر ۱٫۵ کیلوگرم"), a currency policy
+(amounts in toman are **asked about**, never guessed), and a small Persian lexicon mapped to the
+catalog's own vocabulary. **Responses stay English** and the catalog is not translated.
+
+![A Persian request in the interface: the constraints are read correctly and the answer is in English](docs/images/ui-persian.png)
+
+Measured on a separate 60-query Persian set, parallel to the English one (held-out test split,
+before = the same system with no Persian support):
+
+| Persian test split | Before | After |
+|---|---|---|
+| Returned products that break a stated constraint | 22/120 | 0/96 |
+| Constraints interpreted correctly | 22/33 | 33/33 |
+| Recall@10 / nDCG@3 | 0.455 / 0.338 | 0.739 / 0.941 |
+
+**Treat this as a prototype.** The Persian queries were written by an AI assistant and have **not been
+reviewed by a native speaker** (a review sheet is in [docs/fa_review_sheet.md](docs/fa_review_sheet.md)),
+the lexicon shares its author with the queries, and a Persian request that uses no word the lexicon
+lists retrieves nothing meaningful. Not covered: transliterated Persian in Latin letters, colloquial
+spellings, number words, Persian responses. See [docs/evaluation_fa.md](docs/evaluation_fa.md).
+
 ## Data and licensing
 
 - `data/sample/products.jsonl`: 8 fictional products used as the test reference.
@@ -172,7 +196,7 @@ architecture rules.
   split, so `MIN_SIMILARITY` is off; the calibration tool exists but did not generalize.
 - **Small, synthetic, single-author data.** The catalog, queries, relevance rules and the concept
   lexicon share one author and vocabulary; results are optimistic and not evidence of real-world accuracy.
-- One category (laptops), one currency (USD), English only. No live prices, stock or purchasing.
+- One category (laptops), one currency (USD). English responses only; Persian is supported for queries (prototype, unreviewed by a native speaker). No live prices, stock or purchasing.
 - The demo binds to a local interface; a public deployment needs its own authentication, rate
   limiting and TLS design.
 
@@ -180,9 +204,9 @@ architecture rules.
 
 ```text
 src/recommender/   config, schemas, catalog, documents, embeddings, local_embedder, index, retrieval,
-                   query, ranking, llm, grounding, service, api, client, cli, metrics, evaluation
+                   query, persian, ranking, llm, grounding, service, api, client, cli, metrics, evaluation
 ui/app.py          Streamlit interface (talks to the API only)
-data/              sample/ (8 products), demo/ (60 products), eval/ (60 labeled queries)
+data/              sample/ (8 products), demo/ (60 products), eval/ (60 English + 60 Persian labeled queries)
 reports/           raw evaluation outputs
 scripts/           catalog and evaluation-set generators, document renderer, check.sh
 tests/             unit/, integration/, fixtures/
@@ -193,7 +217,7 @@ docs/              architecture, evaluation, data card, environment, product bri
 
 Run the optional E5 backend and LLM explainer against the real models and evaluate them on a fresh
 held-out set; add field-aware weighting to the built-in embedder (needs that fresh set); a real,
-licensed catalog; a native Persian evaluation track; more product categories with typed specs.
+licensed catalog; native-speaker review of the Persian queries, Persian responses and transliterated-Persian support; more product categories with typed specs.
 Each needs a working baseline, a measurable evaluation and a rollback path first.
 
 ## Contributing

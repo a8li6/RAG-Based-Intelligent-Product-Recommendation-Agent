@@ -198,3 +198,26 @@ one), so it is off by default. Findings and limits: `docs/evaluation.md`.
 - A real, licensed catalog; a native Persian evaluation track; more categories.
 - Create the `v0.1.0` tag / GitHub Release (blocked in the build environment).
 - Confirm repository visibility (currently public).
+
+## Session 5 - Persian evaluation track
+
+The release tag was created by the owner. This session added Persian query understanding and a
+separate Persian evaluation, following the protocol that the English track taught:
+1. A 60-query Persian set, parallel to the English one, was written and its test labels frozen.
+2. The unchanged system was measured first: Persian constraints were not read at all (22 of 120 returned
+   products broke a stated constraint; toman amounts were not questioned).
+3. Persian support was built: normalization, constraint phrases, currency policy, a concept lexicon and a
+   translation table to the catalog's vocabulary. Development was run once with no change afterwards; the test
+   split was run once at commit `51211c0`.
+4. Results and limits are in `docs/evaluation_fa.md`; raw reports in `reports/fa/`.
+
+**Honest status.** The Persian texts are AI-written and unreviewed; the lexicon shares their author;
+responses remain English. A review sheet (`docs/fa_review_sheet.md`) is ready for a native speaker.
+
+**Found by tests or measurement:** the matched-pair latency (about 1.4x) differs from the naive comparison
+of two reports (2.3x), so a script now measures matched pairs; concept-only matching ranked a travel query
+differently from its English twin, which led to the translation table; a documentation claim of mine ("Persian
+is slightly ahead") was imprecise (MRR is lower) and is now asserted against the data.
+
+**Still open:** native-speaker review and a re-frozen versioned set; Persian responses; transliterated and
+colloquial Persian; number words ("نهصد دلار"); a fresh holdout before any further embedder tuning.

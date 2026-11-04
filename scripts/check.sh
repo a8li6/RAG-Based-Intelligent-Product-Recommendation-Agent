@@ -24,4 +24,7 @@ python -m pytest -m "not slow" -q
 
 echo "== evaluation tooling smoke test (development split)"
 python -m recommender.cli evaluate --split dev --runs 1 --output "$(mktemp -d)/eval-smoke.json" >/dev/null
+python -m recommender.cli evaluate --split dev --runs 1 \
+  --queries data/eval/fa/queries.jsonl --meta data/eval/fa/meta.json \
+  --output "$(mktemp -d)/eval-fa-smoke.json" >/dev/null
 echo "all checks passed"

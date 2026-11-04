@@ -4,6 +4,9 @@ A bounded recommendation workflow: **understand, validate, retrieve, explain, ve
 Hard constraints are enforced by code; semantic retrieval ranks only the products that pass; every
 sentence shown to the user is built from catalog data and fixed templates.
 
+> **Languages.** English is the primary language. Persian *queries* are supported as an unreviewed
+> prototype (see `docs/evaluation_fa.md`); responses are English and the catalog is not translated.
+>
 > **Honest scope.** The default pipeline is fully offline and contains **no neural model and no
 > language model**. Embeddings come from a built-in hashed TF-IDF embedder with a small curated
 > concept lexicon, and explanations are deterministic templates. An optional E5 embedding backend
@@ -158,4 +161,6 @@ needs its own authentication, rate limiting and TLS design.
 - Raw similarity is not calibrated: an irrelevant query scored above an answerable one on the
   held-out split, so the abstention cutoff is off by default.
 - The catalog and the evaluation set are synthetic and single-author; see `docs/evaluation.md`.
+- Persian query support is a prototype: the queries and the lexicon were written by one AI author and not
+  reviewed by a native speaker, and a request with no lexicon word retrieves nothing meaningful.
 - The optional E5 and LLM paths are unverified against real models.
