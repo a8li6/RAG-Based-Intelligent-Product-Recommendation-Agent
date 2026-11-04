@@ -226,3 +226,41 @@ def test_build_index_is_quiet_when_revision_is_pinned(tmp_path, capsys, embedder
         == 0
     )
     assert "not reproducible" not in capsys.readouterr().err
+
+
+def test_recommend_session_round_trip_through_the_shell(tmp_path, capsys, embedder):
+    out = build_fixture_index(tmp_path, embedder)
+    capsys.readouterr()
+    base = ["--artifacts", str(out), "--no-llm"]
+    first_query = "laptop for coding under $900, at least 16 GB RAM, at most 1.5 kg"
+    assert main(["recommend", "--query", first_query, *base], lambda s: embedder) == 0
+    first = json.loads(capsys.readouterr().out)
+
+    follow = [
+        "recommend",
+        "--query",
+        "under $700 instead",
+        "--session",
+        json.dumps(first["session"]),
+    ]
+    assert main([*follow, *base], lambda s: embedder) == 0
+    second = json.loads(capsys.readouterr().out)
+    assert [r["product_id"] for r in second["recommendations"]] == ["P004"]
+    assert second["interpreted_filters"]["min_ram_gb"] == 16
+
+
+def test_recommend_rejects_a_malformed_session(tmp_path, capsys, embedder):
+    out = build_fixture_index(tmp_path, embedder)
+    capsys.readouterr()
+    for session in ("{not json", '{"max_price_cents": -5}'):
+        args = [
+            "recommend",
+            "--query",
+            "laptop",
+            "--artifacts",
+            str(out),
+            "--no-llm",
+            "--session",
+            session,
+        ]
+        assert main(args, lambda s: embedder) == 2

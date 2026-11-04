@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unicodedata
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 from urllib.parse import urlparse
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -157,6 +157,25 @@ class RecommendationItem(BaseModel):
     unknown_fields: list[str]
 
 
+class SessionState(BaseModel):
+    """Structured active filters, recent semantic intent and a bounded short history.
+
+    The server is stateless: the client holds this value and sends it back with the next
+    request. It is validated like any other input.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    max_price_cents: int | None = Field(default=None, strict=True, ge=0, le=MAX_PRICE_CENTS)
+    min_ram_gb: int | None = Field(default=None, strict=True, ge=1, le=MAX_RAM_GB)
+    max_weight_kg: float | None = Field(default=None, gt=0, le=MAX_WEIGHT_KG, allow_inf_nan=False)
+    require_in_stock: bool = True
+    semantic_query: str | None = Field(default=None, max_length=2000)
+    history: list[Annotated[str, Field(max_length=2000)]] = Field(
+        default_factory=list, max_length=5
+    )
+
+
 ResponseStatus = Literal["ok", "no_match", "needs_clarification"]
 ExplanationMode = Literal["llm", "deterministic"]
 
@@ -169,6 +188,7 @@ class RecommendationRequest(BaseModel):
     query: str = Field(min_length=1, max_length=2000)
     filters: Filters | None = None
     requested_count: int = Field(default=3, strict=True, ge=1, le=3)
+    session: SessionState | None = None  # client-held follow-up context
 
     @field_validator("query", mode="after")
     @classmethod
@@ -204,3 +224,4 @@ class RecommendationResponse(BaseModel):
     artifact_version: str
     fallback_reason: str | None = None  # bounded reason code, never prompt or user text
     timings_ms: dict[str, float] = Field(default_factory=dict)
+    session: SessionState | None = None  # send back with the next request for follow-ups

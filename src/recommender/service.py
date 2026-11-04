@@ -154,6 +154,7 @@ def recommend(
     deps: Dependencies,
 ) -> ServiceResult:
     """Run the full workflow for one request. Raises InvalidQueryError on empty/oversized text."""
+    session = session if session is not None else request.session
     settings = deps.settings
     catalog = deps.catalog
     request_id = uuid.uuid4().hex
@@ -279,4 +280,4 @@ def _finish(
         response.fallback_reason or "-",
         response.timings_ms,
     )
-    return ServiceResult(response=response, session=session)
+    return ServiceResult(response=response.model_copy(update={"session": session}), session=session)

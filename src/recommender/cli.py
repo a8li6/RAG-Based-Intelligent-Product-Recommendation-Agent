@@ -5,32 +5,18 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from pathlib import Path
 
 from recommender.catalog import CatalogValidationError, catalog_report, load_catalog
 from recommender.config import ConfigError, Settings, load_settings
-from recommender.embeddings import E5Embedder, Embedder
+from recommender.factory import EmbedderFactory, default_embedder_factory
 from recommender.index import ArtifactError, build_artifacts, load_artifacts
 from recommender.llm import Explainer
-from recommender.local_embedder import LocalEmbedder
 from recommender.query import InvalidQueryError
 from recommender.retrieval import Retriever
 from recommender.schemas import Constraints, Filters, RecommendationRequest
 from recommender.service import create_dependencies, recommend
-
-EmbedderFactory = Callable[[Settings], Embedder]
-
-
-def default_embedder_factory(settings: Settings) -> Embedder:
-    if settings.embedding_backend == "builtin":
-        return LocalEmbedder()
-    return E5Embedder(
-        settings.embedding_model,
-        settings.embedding_revision,
-        settings.embedding_device,
-        settings.embedding_batch_size,
-    )
 
 
 def _safe_output(path: str, source: str, label: str) -> Path | None:
@@ -158,6 +144,7 @@ def cmd_recommend(
     try:
         request = RecommendationRequest(
             query=args.query,
+            session=json.loads(args.session) if args.session else None,
             filters=Filters(
                 max_price_cents=args.max_price_cents,
                 min_ram_gb=args.min_ram_gb,
@@ -167,11 +154,11 @@ def cmd_recommend(
             requested_count=args.count,
         )
         deps = create_dependencies(settings, embedder_factory(settings), explainer)
-        result = recommend(request, None, deps)
+        result = recommend(request, request.session, deps)
     except ArtifactError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    except (InvalidQueryError, ValueError) as exc:
+    except (InvalidQueryError, ValueError) as exc:  # includes bad --session JSON
         print(f"error: invalid request: {exc}", file=sys.stderr)
         return 2
     print(result.response.model_dump_json(indent=2))
@@ -212,6 +199,7 @@ def build_parser() -> argparse.ArgumentParser:
     rec.add_argument("--max-weight-kg", type=float)
     rec.add_argument("--include-out-of-stock", action="store_true")
     rec.add_argument("--count", type=int, default=3, help="number of products, 1-3")
+    rec.add_argument("--session", help="JSON session from a previous response, for follow-ups")
     mode = rec.add_mutually_exclusive_group()
     mode.add_argument("--no-llm", action="store_true", help="force deterministic explanations")
     mode.add_argument("--llm", action="store_true", help="try the optional local LLM explainer")

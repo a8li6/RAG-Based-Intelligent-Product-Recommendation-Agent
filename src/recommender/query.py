@@ -24,6 +24,7 @@ from recommender.schemas import (
     MAX_WEIGHT_KG,
     Constraints,
     Filters,
+    SessionState,
 )
 
 MAX_HISTORY = 5
@@ -169,19 +170,6 @@ class QueryIntent(BaseModel):
             max_weight_kg=self.max_weight_kg,
             require_in_stock=self.require_in_stock,
         )
-
-
-class SessionState(BaseModel):
-    """Structured active filters, recent semantic intent and a bounded short history."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    max_price_cents: int | None = None
-    min_ram_gb: int | None = None
-    max_weight_kg: float | None = None
-    require_in_stock: bool = True
-    semantic_query: str | None = None
-    history: list[str] = Field(default_factory=list)
 
 
 class ParseResult(BaseModel):

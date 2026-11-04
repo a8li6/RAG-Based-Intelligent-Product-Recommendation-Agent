@@ -344,3 +344,51 @@ def test_logs_contain_ids_and_codes_but_not_raw_user_text(deps, caplog):
     assert "status=ok" in text
     assert "request_id=" in text
     assert secret not in text
+
+
+# --- client-held session (the server stays stateless) ---------------------------------
+
+
+def test_response_carries_the_updated_session(deps):
+    response = ask(deps, REFERENCE).response
+    assert response.session is not None
+    assert response.session.max_price_cents == 89999
+    assert response.session.min_ram_gb == 16
+    assert response.session.max_weight_kg == 1.5
+    assert response.session.history == ["laptop for Python development and travel"]
+
+
+def test_follow_up_works_from_the_session_sent_back_by_the_client(deps):
+    first = ask(deps, REFERENCE).response
+    # A different "server process" would behave identically: only the request carries state.
+    request = RecommendationRequest(query="under $700 instead", session=first.session)
+    second = recommend(request, None, deps)
+    assert ids(second) == ["P004"]
+    assert second.response.interpreted_filters.min_ram_gb == 16
+    assert second.response.session.max_price_cents == 69999
+
+
+def test_clarification_returns_the_unchanged_session(deps):
+    first = ask(deps, REFERENCE).response
+    request = RecommendationRequest(query="laptop for $900", session=first.session)
+    second = recommend(request, None, deps).response
+    assert second.status == "needs_clarification"
+    assert second.session == first.session
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"max_price_cents": -1},
+        {"max_price_cents": "cheap"},
+        {"min_ram_gb": 0},
+        {"max_weight_kg": float("inf")},
+        {"history": ["x"] * 6},
+        {"history": ["x" * 2001]},
+        {"semantic_query": "x" * 2001},
+        {"unexpected": 1},
+    ],
+)
+def test_untrusted_session_values_are_validated(bad):
+    with pytest.raises(ValueError):
+        RecommendationRequest(query="laptop", session=bad)
