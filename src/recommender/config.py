@@ -61,6 +61,14 @@ class Settings(BaseSettings):
         return value if value.is_absolute() else PROJECT_ROOT / value
 
 
+class IsolatedSettings(Settings):
+    """Settings that ignore .env and the process environment (for reproducible evaluation)."""
+
+    @classmethod
+    def settings_customise_sources(cls, settings_cls, init_settings, *args, **kwargs):
+        return (init_settings,)
+
+
 def load_settings(**overrides) -> Settings:
     """Load settings from the environment and .env; raise ConfigError on invalid values."""
     try:

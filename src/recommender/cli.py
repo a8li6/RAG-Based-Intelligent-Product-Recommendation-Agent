@@ -10,6 +10,14 @@ from pathlib import Path
 
 from recommender.catalog import CatalogValidationError, catalog_report, load_catalog
 from recommender.config import ConfigError, Settings, load_settings
+from recommender.evaluation import (
+    DEFAULT_CATALOG,
+    DEFAULT_META,
+    DEFAULT_QUERIES,
+    EvaluationError,
+    render_summary,
+    run_evaluation,
+)
 from recommender.factory import EmbedderFactory, default_embedder_factory
 from recommender.index import ArtifactError, build_artifacts, load_artifacts
 from recommender.llm import Explainer
@@ -126,6 +134,54 @@ def cmd_search(
     return 0
 
 
+def cmd_evaluate(
+    args: argparse.Namespace,
+    settings: Settings | None = None,
+    embedder_factory: EmbedderFactory | None = None,
+    explainer: Explainer | None = None,
+) -> int:
+    """Evaluate on a frozen split. Independent of .env so results are reproducible."""
+    split = "dev" if args.calibrate else args.split
+    output = Path(args.output) if args.output else Path("reports") / f"eval-{split}.json"
+    command = "python -m recommender.cli " + " ".join(sys.argv[1:] or ["evaluate"])
+    try:
+        report = run_evaluation(
+            split,
+            catalog_path=Path(args.catalog),
+            queries_path=Path(args.queries),
+            meta_path=Path(args.meta),
+            min_similarity=args.min_score,
+            runs=args.runs,
+            command=command,
+        )
+    except EvaluationError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    except (
+        FileNotFoundError,
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+        CatalogValidationError,
+    ) as exc:
+        print(f"error: cannot read evaluation inputs: {type(exc).__name__}", file=sys.stderr)
+        return 2
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(render_summary(report))
+    if args.calibrate:
+        cal = report["calibration"]
+        if cal is None:
+            print("calibration: not possible (needs answerable and irrelevant dev queries)")
+        else:
+            print(
+                f"\ncalibration (development split only): threshold={cal['threshold']:.4f} "
+                f"balanced accuracy={cal['balanced_accuracy']:.3f} separable={cal['separable']}\n"
+                f"suggested setting: MIN_SIMILARITY={cal['threshold']:.4f}"
+            )
+    print(f"\nreport written to {output}")
+    return 0
+
+
 def cmd_recommend(
     args: argparse.Namespace,
     settings: Settings,
@@ -200,6 +256,17 @@ def build_parser() -> argparse.ArgumentParser:
     rec.add_argument("--include-out-of-stock", action="store_true")
     rec.add_argument("--count", type=int, default=3, help="number of products, 1-3")
     rec.add_argument("--session", help="JSON session from a previous response, for follow-ups")
+    ev = sub.add_parser("evaluate", help="measure quality on a frozen evaluation split")
+    ev.add_argument("--split", choices=["dev", "test", "all"], default="test")
+    ev.add_argument("--calibrate", action="store_true", help="dev only: suggest MIN_SIMILARITY")
+    ev.add_argument("--min-score", type=float, help="abstention cutoff to evaluate with")
+    ev.add_argument("--runs", type=int, default=5, help="warm latency runs per query")
+    ev.add_argument("--catalog", default=str(DEFAULT_CATALOG))
+    ev.add_argument("--queries", default=str(DEFAULT_QUERIES))
+    ev.add_argument("--meta", default=str(DEFAULT_META))
+    ev.add_argument("--output", help="report path (default: reports/eval-<split>.json)")
+    ev.set_defaults(func=cmd_evaluate)
+
     mode = rec.add_mutually_exclusive_group()
     mode.add_argument("--no-llm", action="store_true", help="force deterministic explanations")
     mode.add_argument("--llm", action="store_true", help="try the optional local LLM explainer")
@@ -215,6 +282,8 @@ def main(
     args = build_parser().parse_args(argv)
     if args.func is cmd_validate_data:
         return cmd_validate_data(args)
+    if args.func is cmd_evaluate:
+        return cmd_evaluate(args)
     try:
         settings = load_settings()
     except ConfigError as exc:

@@ -33,7 +33,7 @@ from pathlib import Path
 import faiss
 
 from recommender.catalog import Catalog, is_eligible, load_catalog
-from recommender.config import Settings
+from recommender.config import IsolatedSettings
 from recommender.documents import DOCUMENT_FORMAT_VERSION, catalog_documents
 from recommender.index import build_artifacts
 from recommender.local_embedder import LocalEmbedder, tokenize
@@ -536,8 +536,7 @@ def run_evaluation(
     chosen = [r for r in records if split == "all" or r["split"] == split]
 
     with tempfile.TemporaryDirectory() as tmp:
-        settings = Settings(
-            _env_file=None,
+        settings = IsolatedSettings(
             catalog_path=Path(catalog_path),
             artifact_dir=Path(tmp) / "index",
             explanation_mode="deterministic",

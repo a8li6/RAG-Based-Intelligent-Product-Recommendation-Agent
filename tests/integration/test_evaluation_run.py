@@ -140,3 +140,14 @@ def test_a_changed_catalog_stops_the_evaluation(tmp_path):
     changed.write_text("\n".join(lines) + "\n", encoding="utf-8")
     with pytest.raises(EvaluationError, match="label drift"):
         run_evaluation("dev", catalog_path=changed, runs=1)
+
+
+def test_the_evaluation_ignores_the_process_environment(dev, monkeypatch):
+    monkeypatch.setenv("RETRIEVAL_K", "3")
+    monkeypatch.setenv("MAX_RECOMMENDATIONS", "1")
+    monkeypatch.setenv("EXPLANATION_MODE", "llm")
+    monkeypatch.setenv("LLM_BASE_URL", "http://127.0.0.1:9")
+    other = run_evaluation("dev", runs=1)
+    assert other["configuration"]["retrieval_k"] == 10
+    assert other["configuration"]["settings"]["explanation_mode"] == "deterministic"
+    assert strip_timing(other) == strip_timing(dev)

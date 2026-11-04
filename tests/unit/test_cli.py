@@ -264,3 +264,60 @@ def test_recommend_rejects_a_malformed_session(tmp_path, capsys, embedder):
             session,
         ]
         assert main(args, lambda s: embedder) == 2
+
+
+# --- evaluate ------------------------------------------------------------------------
+
+
+def test_evaluate_writes_a_report_and_prints_the_summary(tmp_path, capsys):
+    out = tmp_path / "report.json"
+    assert main(["evaluate", "--split", "dev", "--runs", "1", "--output", str(out)]) == 0
+    printed = capsys.readouterr().out
+    assert "builtin" in printed and "keyword" in printed and "oracle" in printed
+    assert "report written to" in printed
+    report = json.loads(out.read_text())
+    assert report["split"] == "dev" and len(report["per_query"]) == 20
+    assert report["configuration"]["eval_set_sha256"]
+
+
+def test_evaluate_calibrate_runs_on_dev_and_suggests_a_setting(tmp_path, capsys):
+    out = tmp_path / "cal.json"
+    assert main(["evaluate", "--calibrate", "--runs", "1", "--output", str(out)]) == 0
+    printed = capsys.readouterr().out
+    assert "calibration (development split only)" in printed
+    assert "MIN_SIMILARITY=" in printed
+    assert json.loads(out.read_text())["split"] == "dev"
+
+
+def test_evaluate_rejects_an_unknown_split():
+    with pytest.raises(SystemExit) as exc:
+        main(["evaluate", "--split", "validation"])
+    assert exc.value.code == 2
+
+
+def test_evaluate_stops_on_label_drift(tmp_path, capsys):
+    lines = (ROOT / "data" / "demo" / "products.jsonl").read_text().splitlines()
+    record = json.loads(lines[3])
+    record["price_cents"] += 1
+    lines[3] = json.dumps(record)
+    changed = tmp_path / "products.jsonl"
+    changed.write_text("\n".join(lines) + "\n")
+    out = tmp_path / "r.json"
+    code = main(["evaluate", "--split", "dev", "--catalog", str(changed), "--output", str(out)])
+    assert code == 1
+    assert "label drift" in capsys.readouterr().err
+    assert not out.exists()
+
+
+def test_evaluate_reports_missing_inputs(tmp_path, capsys):
+    code = main(["evaluate", "--split", "dev", "--queries", str(tmp_path / "nope.jsonl")])
+    assert code == 2
+    assert "cannot read evaluation inputs" in capsys.readouterr().err
+
+
+def test_evaluate_ignores_the_environment(tmp_path, capsys, monkeypatch):
+    monkeypatch.setenv("RETRIEVAL_K", "0")  # would break load_settings(); evaluate must not care
+    assert (
+        main(["evaluate", "--split", "dev", "--runs", "1", "--output", str(tmp_path / "r.json")])
+        == 0
+    )
