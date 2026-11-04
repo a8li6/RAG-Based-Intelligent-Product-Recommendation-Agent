@@ -1,0 +1,2432 @@
+{
+  "generated_at": "2026-11-04T08:59:14+00:00",
+  "command": "python -m recommender.cli evaluate --split dev --queries data/eval/fa/queries.jsonl --meta data/eval/fa/meta.json --runs 5 --output reports/fa/baseline-no-persian-support-dev.json",
+  "split": "dev",
+  "configuration": {
+    "settings": {
+      "catalog_path": "/home/user/rag-based-intelligent-product-recommendation-agent/data/demo/products.jsonl",
+      "artifact_dir": "/tmp/tmpu76z4zga/index",
+      "embedding_backend": "builtin",
+      "embedding_model": "intfloat/multilingual-e5-small",
+      "embedding_revision": "main",
+      "embedding_device": "cpu",
+      "embedding_batch_size": 32,
+      "llm_base_url": "http://127.0.0.1:11434",
+      "llm_model": "qwen3:4b",
+      "llm_timeout_seconds": 60.0,
+      "retrieval_k": 10,
+      "max_recommendations": 3,
+      "default_currency": "USD",
+      "explanation_mode": "deterministic",
+      "log_level": "INFO",
+      "min_similarity": null,
+      "max_query_chars": 2000,
+      "max_request_bytes": 16384,
+      "max_concurrent_requests": 4,
+      "auto_build_index": true
+    },
+    "retrieval_k": 10,
+    "max_recommendations": 3,
+    "explanation": "deterministic templates (no language model)",
+    "embedder": "builtin-hashed-tfidf-v1",
+    "embedder_revision": "idf-31d8131ea345e958",
+    "document_format_version": "doc-v1",
+    "catalog_file": "products.jsonl",
+    "catalog_sha256": "42a7c29e4095b075de4c0677d36e559644762c84226cee1d12933c0b089c990a",
+    "catalog_size": 60,
+    "index_version": "42a7c29e4095",
+    "eval_set_sha256": "7c276fb8a8ce39beeff5676da09915ff3d0593cd216f44018d2c3685b356796b",
+    "test_labels_sha256": "5a5c688a7c340df13c9e7f293e01477c6e97356a481885d3a7bd0ffc8b528356",
+    "random_baseline_draws": 50,
+    "latency_runs_per_query": 5
+  },
+  "summary": {
+    "queries": 20,
+    "positive_queries_with_relevant_eligible": 16,
+    "retrieval": {
+      "builtin": {
+        "recall_at_10": {
+          "mean": 0.398107,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.875,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.549931,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "keyword": {
+        "recall_at_10": {
+          "mean": 0.398107,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.71875,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.477655,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "random": {
+        "recall_at_10": {
+          "mean": 0.274071,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.543333,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.308782,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "post_filter": {
+        "recall_at_10": {
+          "mean": 0.315059,
+          "n": 16,
+          "skipped": 0
+        },
+        "mrr_at_3": {
+          "mean": 0.854167,
+          "n": 16,
+          "skipped": 0
+        },
+        "ndcg_at_3": {
+          "mean": 0.377328,
+          "n": 16,
+          "skipped": 0
+        }
+      },
+      "oracle_recall_at_10": {
+        "mean": 0.607723,
+        "n": 16,
+        "skipped": 0
+      }
+    },
+    "retrieval_by_category": {
+      "constraints": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.791667,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.753265,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.791667,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.666667,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.421787,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "queries": 2
+      },
+      "direct": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.215812,
+            "n": 4,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.5,
+            "n": 4,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.31378,
+            "n": 4,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.215812,
+            "n": 4,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.708333,
+            "n": 4,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.363127,
+            "n": 4,
+            "skipped": 0
+          }
+        },
+        "queries": 4
+      },
+      "model-name": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 1.0,
+            "n": 2,
+            "skipped": 0
+          }
+        },
+        "queries": 2
+      },
+      "negation": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.16,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.567973,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.16,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.333333,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.234639,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "queries": 1
+      },
+      "paraphrase": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.21978,
+            "n": 6,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 6,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.450653,
+            "n": 6,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.21978,
+            "n": 6,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 0.666667,
+            "n": 6,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.401306,
+            "n": 6,
+            "skipped": 0
+          }
+        },
+        "queries": 6
+      },
+      "unknown-spec": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": 0.444444,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.765361,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": 0.444444,
+            "n": 1,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": 1.0,
+            "n": 1,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": 0.703918,
+            "n": 1,
+            "skipped": 0
+          }
+        },
+        "queries": 1
+      }
+    },
+    "retrieval_by_lexicon": {
+      "lexicon_hit_expected": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          }
+        },
+        "queries": 0
+      },
+      "lexicon_miss_expected": {
+        "builtin": {
+          "recall_at_10": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          }
+        },
+        "keyword": {
+          "recall_at_10": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "mrr_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          },
+          "ndcg_at_3": {
+            "mean": null,
+            "n": 0,
+            "skipped": 0
+          }
+        },
+        "queries": 0
+      }
+    },
+    "system": {
+      "status_accuracy": {
+        "value": 0.8,
+        "numerator": 16,
+        "denominator": 20
+      },
+      "status_accuracy_by_category": {
+        "ambiguous": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "constraints": {
+          "value": 1.0,
+          "numerator": 2,
+          "denominator": 2
+        },
+        "direct": {
+          "value": 1.0,
+          "numerator": 4,
+          "denominator": 4
+        },
+        "irrelevant": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 2
+        },
+        "model-name": {
+          "value": 1.0,
+          "numerator": 2,
+          "denominator": 2
+        },
+        "negation": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        },
+        "no-eligible": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "paraphrase": {
+          "value": 1.0,
+          "numerator": 6,
+          "denominator": 6
+        },
+        "unknown-spec": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
+        }
+      },
+      "interpretation_accuracy": {
+        "value": 0.823529,
+        "numerator": 14,
+        "denominator": 17
+      },
+      "constraint_violation_rate": {
+        "value": 0.1,
+        "numerator": 6,
+        "denominator": 60
+      },
+      "answer_rate_on_positive_queries": {
+        "value": 1.0,
+        "numerator": 16,
+        "denominator": 16
+      },
+      "false_empty_rate": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 16
+      },
+      "no_match_accuracy": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 1
+      },
+      "clarification_accuracy": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 3
+      },
+      "abstention_on_irrelevant": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 2
+      },
+      "mrr_at_3": {
+        "mean": 0.71875,
+        "n": 16,
+        "skipped": 0
+      },
+      "ndcg_at_3": {
+        "mean": 0.444485,
+        "n": 16,
+        "skipped": 0
+      },
+      "evidence_validity": {
+        "value": 1.0,
+        "numerator": 840,
+        "denominator": 840
+      },
+      "fallback_rate": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 20
+      }
+    }
+  },
+  "operational": {
+    "cold_first_request_ms": 9.215678,
+    "warm_request_count": 100,
+    "warm_p50_ms": 0.80469,
+    "warm_p95_ms": 1.092511,
+    "stage_mean_ms": {
+      "parse": 0.11155,
+      "filter": 0.02542,
+      "retrieve": 0.24175,
+      "select": 0.02473,
+      "explain": 0.34097,
+      "render": 0.04039
+    },
+    "slowest_stage": "explain",
+    "catalog_build_seconds": 0.034105,
+    "peak_rss_mb": 68.207031,
+    "request_count": 120,
+    "hardware": {
+      "platform": "Linux-6.18.44-fc-v233-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu_count": 4,
+      "python": "3.11.17",
+      "faiss": "1.15.1"
+    }
+  },
+  "calibration": {
+    "threshold": 0.18095,
+    "balanced_accuracy": 0.5625,
+    "tpr": 0.125,
+    "tnr": 1.0,
+    "answer_queries": 16,
+    "abstain_queries": 2,
+    "separable": false,
+    "max_abstain_score": 0.0,
+    "min_answer_score": 0.0
+  },
+  "per_query": [
+    {
+      "query_id": "D1",
+      "split": "dev",
+      "category": "direct",
+      "query": "لپ‌تاپ برای بازی",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای بازی",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 13,
+      "system_mrr_at_3": 0.5,
+      "system_ndcg_at_3": 0.296082,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P019",
+          "P018",
+          "P032",
+          "P014",
+          "P053",
+          "P024",
+          "P052",
+          "P031",
+          "P059",
+          "P048"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.0,
+          "ndcg_at_3": 0.0
+        },
+        "keyword": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.5,
+          "ndcg_at_3": 0.296082
+        },
+        "post_filter": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.0,
+          "ndcg_at_3": 0.0
+        },
+        "random": {
+          "recall_at_10": 0.16,
+          "mrr_at_3": 0.323333,
+          "ndcg_at_3": 0.157281
+        }
+      },
+      "oracle_recall_at_10": 0.769231
+    },
+    {
+      "query_id": "D4",
+      "split": "dev",
+      "category": "direct",
+      "query": "لپ‌تاپ برای برنامه‌نویسی",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای برنامه نویسی",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 18,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.765361,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P043",
+          "P038",
+          "P035",
+          "P024",
+          "P032",
+          "P008",
+          "P002",
+          "P059",
+          "P042",
+          "P019"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.277778,
+          "mrr_at_3": 0.0,
+          "ndcg_at_3": 0.0
+        },
+        "keyword": {
+          "recall_at_10": 0.277778,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "post_filter": {
+          "recall_at_10": 0.277778,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "random": {
+          "recall_at_10": 0.181111,
+          "mrr_at_3": 0.43,
+          "ndcg_at_3": 0.28756
+        }
+      },
+      "oracle_recall_at_10": 0.555556
+    },
+    {
+      "query_id": "D6",
+      "split": "dev",
+      "category": "direct",
+      "query": "لپ‌تاپ برای درس خواندن و یادداشت‌برداری در کلاس",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای درس خواندن و یادداشت برداری در کلاس",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.234639,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P030",
+          "P039",
+          "P018",
+          "P038",
+          "P048",
+          "P026",
+          "P053",
+          "P024",
+          "P015",
+          "P059"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "keyword": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "post_filter": {
+          "recall_at_10": 0.115385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "random": {
+          "recall_at_10": 0.195385,
+          "mrr_at_3": 0.603333,
+          "ndcg_at_3": 0.357952
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "D9",
+      "split": "dev",
+      "category": "direct",
+      "query": "یک لپ‌تاپ سبک برای سفر",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "یک لپ تاپ سبک برای سفر",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 18,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.156426,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P053",
+          "P005",
+          "P019",
+          "P059",
+          "P021",
+          "P060",
+          "P042",
+          "P028",
+          "P052",
+          "P049"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.277778,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.687148
+        },
+        "keyword": {
+          "recall_at_10": 0.277778,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "post_filter": {
+          "recall_at_10": 0.222222,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "random": {
+          "recall_at_10": 0.184444,
+          "mrr_at_3": 0.446667,
+          "ndcg_at_3": 0.150614
+        }
+      },
+      "oracle_recall_at_10": 0.555556
+    },
+    {
+      "query_id": "P1",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "لپ‌تاپ قابل حمل برای کدنویسی و رفت‌وآمد",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ قابل حمل برای کدنویسی و رفت وآمد",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.567973,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P042",
+          "P052",
+          "P012",
+          "P015",
+          "P038",
+          "P029",
+          "P026",
+          "P010",
+          "P027",
+          "P014"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "keyword": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "post_filter": {
+          "recall_at_10": 0.25,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "random": {
+          "recall_at_10": 0.182143,
+          "mrr_at_3": 0.68,
+          "ndcg_at_3": 0.279926
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P2",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "برنامه‌نویسم و هر روز با مترو می‌روم سر کار، چیزی می‌خواهم که راحت همراهم ببرم",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "برنامه نویسم و هر روز با مترو می روم سر کار، چیزی می خواهم که راحت همراهم ببرم",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.567973,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P012",
+          "P041",
+          "P026",
+          "P010",
+          "P031",
+          "P004",
+          "P022",
+          "P050",
+          "P019",
+          "P005"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "keyword": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "post_filter": {
+          "recall_at_10": 0.25,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "random": {
+          "recall_at_10": 0.2,
+          "mrr_at_3": 0.666667,
+          "ndcg_at_3": 0.251024
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P3",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "یک لپ‌تاپ برای توسعه‌دهنده‌هایی که همیشه در حرکت‌اند",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "یک لپ تاپ برای توسعه دهنده هایی که همیشه در حرکت اند",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 28,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.567973,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P004",
+          "P055",
+          "P016",
+          "P059",
+          "P027",
+          "P003",
+          "P011",
+          "P036",
+          "P054",
+          "P038"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "keyword": {
+          "recall_at_10": 0.285714,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "post_filter": {
+          "recall_at_10": 0.25,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.333333
+        },
+        "random": {
+          "recall_at_10": 0.185,
+          "mrr_at_3": 0.643333,
+          "ndcg_at_3": 0.232924
+        }
+      },
+      "oracle_recall_at_10": 0.357143
+    },
+    {
+      "query_id": "P7",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "لپ‌تاپ برای دانشجویی که در کلاس‌های دانشگاه شرکت می‌کند",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای دانشجویی که در کلاس های دانشگاه شرکت می کند",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.234639,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P031",
+          "P005",
+          "P008",
+          "P036",
+          "P014",
+          "P038",
+          "P002",
+          "P035",
+          "P027",
+          "P020"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "keyword": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "post_filter": {
+          "recall_at_10": 0.115385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "random": {
+          "recall_at_10": 0.2,
+          "mrr_at_3": 0.733333,
+          "ndcg_at_3": 0.410279
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "P8",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "چیزی برای تکالیف مدرسه بچه‌ام و خواندن مطالب آنلاین",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "چیزی برای تکالیف مدرسه بچه ام و خواندن مطالب آنلاین",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.234639,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P056",
+          "P026",
+          "P004",
+          "P022",
+          "P046",
+          "P048",
+          "P047",
+          "P040",
+          "P012",
+          "P060"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "keyword": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "post_filter": {
+          "recall_at_10": 0.115385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "random": {
+          "recall_at_10": 0.19,
+          "mrr_at_3": 0.743333,
+          "ndcg_at_3": 0.445028
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "P9",
+      "split": "dev",
+      "category": "paraphrase",
+      "query": "یک لپ‌تاپ برای رفتن به کلاس و نوشتن مقاله",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "یک لپ تاپ برای رفتن به کلاس و نوشتن مقاله",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 26,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.234639,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P056",
+          "P038",
+          "P024",
+          "P022",
+          "P010",
+          "P012",
+          "P046",
+          "P004",
+          "P031",
+          "P005"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "keyword": {
+          "recall_at_10": 0.153846,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "post_filter": {
+          "recall_at_10": 0.115385,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "random": {
+          "recall_at_10": 0.177692,
+          "mrr_at_3": 0.616667,
+          "ndcg_at_3": 0.370279
+        }
+      },
+      "oracle_recall_at_10": 0.384615
+    },
+    {
+      "query_id": "E1",
+      "split": "dev",
+      "category": "constraints",
+      "query": "لپ‌تاپ برای برنامه‌نویسی، زیر ۹۰۰ دلار، حداقل ۱۶ گیگابایت رم و حداکثر ۱٫۵ کیلوگرم",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [
+        "P002",
+        "P003"
+      ],
+      "interpretation_ok": false,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای برنامه نویسی، زیر ۹۰۰ دلار، حداقل ۱۶ گیگابایت رم و حداکثر ۱٫۵ کیلوگرم",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 3,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.469279,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P046",
+          "P012",
+          "P004",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P004",
+          "P012",
+          "P046"
+        ],
+        "random": [
+          "P046",
+          "P004",
+          "P012",
+          "P001"
+        ],
+        "post_filter": [
+          "P004",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.703918
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "post_filter": {
+          "recall_at_10": 0.666667,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "random": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 0.84,
+          "ndcg_at_3": 0.72715
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "E5",
+      "split": "dev",
+      "category": "constraints",
+      "query": "لپ‌تاپ برای کار اداری",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P003",
+        "P004",
+        "P006"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای کار اداری",
+        "max_price_cents": 80000,
+        "currency": "USD",
+        "min_ram_gb": 8,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 12,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.078213,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P022",
+          "P021",
+          "P020",
+          "P019",
+          "P018",
+          "P011",
+          "P008",
+          "P006",
+          "P004",
+          "P003"
+        ],
+        "keyword": [
+          "P003",
+          "P004",
+          "P006",
+          "P008",
+          "P011",
+          "P018",
+          "P019",
+          "P020",
+          "P021",
+          "P022"
+        ],
+        "random": [
+          "P023",
+          "P031",
+          "P032",
+          "P003",
+          "P019",
+          "P024",
+          "P034",
+          "P006",
+          "P028",
+          "P011"
+        ],
+        "post_filter": [
+          "P008",
+          "P006",
+          "P004",
+          "P003"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.583333,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.802612
+        },
+        "keyword": {
+          "recall_at_10": 0.583333,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.078213
+        },
+        "post_filter": {
+          "recall_at_10": 0.166667,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.25512
+        },
+        "random": {
+          "recall_at_10": 0.518333,
+          "mrr_at_3": 0.746667,
+          "ndcg_at_3": 0.458881
+        }
+      },
+      "oracle_recall_at_10": 0.833333
+    },
+    {
+      "query_id": "M1",
+      "split": "dev",
+      "category": "model-name",
+      "query": "لپ‌تاپ Atlas Air 14",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P015",
+        "P046"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ Atlas Air 14",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 1,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": null,
+      "top_score": 0.3619,
+      "rankings": {
+        "builtin": [
+          "P001",
+          "P015",
+          "P046",
+          "P012",
+          "P016",
+          "P010",
+          "P036",
+          "P003",
+          "P024",
+          "P030"
+        ],
+        "keyword": [
+          "P001",
+          "P015",
+          "P010",
+          "P012",
+          "P016",
+          "P003",
+          "P045",
+          "P029",
+          "P053",
+          "P024"
+        ],
+        "random": [
+          "P045",
+          "P009",
+          "P028",
+          "P032",
+          "P015",
+          "P029",
+          "P027",
+          "P055",
+          "P020",
+          "P059"
+        ],
+        "post_filter": [
+          "P001",
+          "P015",
+          "P046",
+          "P012",
+          "P016",
+          "P010",
+          "P036",
+          "P003",
+          "P024"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.24,
+          "mrr_at_3": 0.05,
+          "ndcg_at_3": 0.052619
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "M2",
+      "split": "dev",
+      "category": "model-name",
+      "query": "لپ‌تاپ Forge Pro 15",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P002",
+        "P035",
+        "P037"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ Forge Pro 15",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 1,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 1.0,
+      "lexicon_hit_expected": null,
+      "top_score": 0.369299,
+      "rankings": {
+        "builtin": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P019",
+          "P018",
+          "P006",
+          "P008",
+          "P017",
+          "P056"
+        ],
+        "keyword": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P018",
+          "P019",
+          "P006",
+          "P008",
+          "P049",
+          "P041"
+        ],
+        "random": [
+          "P035",
+          "P002",
+          "P031",
+          "P011",
+          "P026",
+          "P024",
+          "P042",
+          "P015",
+          "P038",
+          "P036"
+        ],
+        "post_filter": [
+          "P002",
+          "P035",
+          "P037",
+          "P038",
+          "P019",
+          "P018",
+          "P006",
+          "P008",
+          "P017"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "keyword": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "post_filter": {
+          "recall_at_10": 1.0,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 1.0
+        },
+        "random": {
+          "recall_at_10": 0.24,
+          "mrr_at_3": 0.026667,
+          "ndcg_at_3": 0.04
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "U1",
+      "split": "dev",
+      "category": "unknown-spec",
+      "query": "لپ‌تاپ برای توسعه نرم‌افزار با وزن حداکثر ۱٫۶ کیلوگرم",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [
+        "P002"
+      ],
+      "interpretation_ok": false,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای توسعه نرم افزار با وزن حداکثر ۱٫۶ کیلوگرم",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 9,
+      "system_mrr_at_3": 1.0,
+      "system_ndcg_at_3": 0.469279,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P016",
+          "P015",
+          "P014",
+          "P012",
+          "P011",
+          "P010",
+          "P009",
+          "P004",
+          "P003",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P003",
+          "P004",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P014",
+          "P015",
+          "P016"
+        ],
+        "random": [
+          "P039",
+          "P046",
+          "P015",
+          "P010",
+          "P001",
+          "P018",
+          "P029",
+          "P028",
+          "P004",
+          "P017"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P004",
+          "P003",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.444444,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.765361
+        },
+        "keyword": {
+          "recall_at_10": 0.444444,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.703918
+        },
+        "post_filter": {
+          "recall_at_10": 0.222222,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "random": {
+          "recall_at_10": 0.342222,
+          "mrr_at_3": 0.516667,
+          "ndcg_at_3": 0.329386
+        }
+      },
+      "oracle_recall_at_10": 1.0
+    },
+    {
+      "query_id": "N1",
+      "split": "dev",
+      "category": "no-eligible",
+      "query": "لپ‌تاپ زیر ۳۰۰ دلار",
+      "expected_status": "no_match",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "interpretation_ok": false,
+      "interpreted": {
+        "semantic_query": "لپ تاپ زیر ۳۰۰ دلار",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": null
+    },
+    {
+      "query_id": "A1",
+      "split": "dev",
+      "category": "ambiguous",
+      "query": "یک لپ‌تاپ ارزان",
+      "expected_status": "needs_clarification",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "یک لپ تاپ ارزان",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": null
+    },
+    {
+      "query_id": "I1",
+      "split": "dev",
+      "category": "irrelevant",
+      "query": "دستور پخت اسموتی موز",
+      "expected_status": "needs_clarification",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "دستور پخت اسموتی موز",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P055",
+          "P003",
+          "P060",
+          "P020",
+          "P047",
+          "P037",
+          "P036",
+          "P024",
+          "P005",
+          "P004"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      }
+    },
+    {
+      "query_id": "I2",
+      "split": "dev",
+      "category": "irrelevant",
+      "query": "هوای پاریس فردا چطور است",
+      "expected_status": "needs_clarification",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "هوای پاریس فردا چطور است",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 0,
+      "system_mrr_at_3": null,
+      "system_ndcg_at_3": null,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P049",
+          "P008",
+          "P001",
+          "P045",
+          "P034",
+          "P028",
+          "P030",
+          "P036",
+          "P019",
+          "P059"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      }
+    },
+    {
+      "query_id": "G1",
+      "split": "dev",
+      "category": "negation",
+      "query": "لپ‌تاپ برای درس، نه برای بازی",
+      "expected_status": "ok",
+      "status": "ok",
+      "returned": [
+        "P001",
+        "P002",
+        "P003"
+      ],
+      "violations": [],
+      "interpretation_ok": true,
+      "interpreted": {
+        "semantic_query": "لپ تاپ برای درس، نه برای بازی",
+        "max_price_cents": null,
+        "currency": "USD",
+        "min_ram_gb": null,
+        "max_weight_kg": null,
+        "require_in_stock": true
+      },
+      "claims_checked": 42,
+      "claims_valid": 42,
+      "explanation_mode": "deterministic",
+      "fallback_reason": "llm_disabled",
+      "relevant_eligible": 25,
+      "system_mrr_at_3": 0.333333,
+      "system_ndcg_at_3": 0.234639,
+      "lexicon_hit_expected": null,
+      "top_score": 0.0,
+      "rankings": {
+        "builtin": [
+          "P011",
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ],
+        "keyword": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P008",
+          "P009",
+          "P010",
+          "P011"
+        ],
+        "random": [
+          "P004",
+          "P021",
+          "P032",
+          "P031",
+          "P034",
+          "P020",
+          "P017",
+          "P016",
+          "P052",
+          "P038"
+        ],
+        "post_filter": [
+          "P010",
+          "P009",
+          "P008",
+          "P006",
+          "P005",
+          "P004",
+          "P003",
+          "P002",
+          "P001"
+        ]
+      },
+      "retrieval": {
+        "builtin": {
+          "recall_at_10": 0.16,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.567973
+        },
+        "keyword": {
+          "recall_at_10": 0.16,
+          "mrr_at_3": 0.333333,
+          "ndcg_at_3": 0.234639
+        },
+        "post_filter": {
+          "recall_at_10": 0.12,
+          "mrr_at_3": 1.0,
+          "ndcg_at_3": 0.156426
+        },
+        "random": {
+          "recall_at_10": 0.1888,
+          "mrr_at_3": 0.626667,
+          "ndcg_at_3": 0.389608
+        }
+      },
+      "oracle_recall_at_10": 0.4
+    }
+  ]
+}
