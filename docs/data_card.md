@@ -1,4 +1,10 @@
-# Data Card: Synthetic Laptop Reference Catalog
+# Data Card: Synthetic Laptop Catalogs
+
+This project ships two fully synthetic catalogs. The 8-product **reference fixture** (first section)
+is used for engineering tests; the 60-product **demonstration catalog** (last section) is the
+default for the API, the UI and the evaluation.
+
+## Reference fixture
 
 | Item | Value |
 |---|---|
@@ -48,3 +54,46 @@ constraint is active.
 - Any real catalog added later must document its origin, access date, license
   and redistribution rights here, and keep its license separate from the
   project's code license.
+
+## Demonstration catalog
+
+| Item | Value |
+|---|---|
+| File | `data/demo/products.jsonl` (regenerate with `python scripts/build_demo_catalog.py`) |
+| Origin | Authored for this project. **Fully synthetic and fictional.** P001-P008 are the reference fixture, unchanged; P009-P060 are written in the generator script. |
+| Records | 60 (catalog SHA-256 `42a7c29e4095...`) |
+| Brands | DemoLab (8), Nordik (10), Helio (11), Quanta (11), Astra (11), Verdant (9): all fictional |
+| Segments | ultraportable, mainstream office and home, student budget, developer, gaming, creator and 3D |
+| Price range | 449.00 to 1,999.00 USD (snapshot values, not historical or live) |
+| Graphics | 44 integrated, 15 dedicated, 1 unknown |
+| Stock | 53 in stock, 7 out of stock (snapshot flag, not live availability) |
+| Source URLs | `https://catalog.example/products/<ID>`: reserved `.example` domain, sample identifiers only |
+| License / redistribution | Authored for this repository and distributed with it under the repository's MIT terms. Not derived from any third-party catalog. |
+
+### Construction rules
+
+- Titles are unique (the evaluation includes exact model-name searches).
+- The sentence about specifications in each description is **generated from the numeric fields**, so
+  a description cannot contradict its own data; a hand-written blurb precedes it.
+- No description makes a benchmark, battery, speed or percentage claim; tests enforce this.
+- Unknown values are `null` and are stated as "not provided" in the description.
+
+### Missingness (by design)
+
+| Field | Unknown in |
+|---|---|
+| `ram_gb` | 1 product (P060) |
+| `storage_gb` | 1 product (P031) |
+| `weight_kg` | 2 products (P008, P045) |
+| `gpu_type` | 1 product (P059) |
+
+A product with an unknown value cannot satisfy an active constraint on that value, so it is excluded
+when such a constraint is active.
+
+### Known biases and limits
+
+- Written by one author, together with the evaluation queries, the relevance rules and the built-in
+  embedder's concept lexicon. They share vocabulary, which makes retrieval results **optimistic**.
+- Use-case tags come from a small controlled vocabulary; real catalogs are noisier.
+- One category, one currency, English text, and no ratings, reviews or images.
+- Not suitable for measuring real-world recommendation accuracy; see `docs/evaluation.md`.

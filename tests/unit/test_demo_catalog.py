@@ -104,3 +104,30 @@ def test_documents_stay_well_under_the_model_token_limit(catalog):
 def test_every_product_id_is_unique_and_ordered(catalog):
     ids = catalog.product_ids
     assert ids == sorted(ids) == [f"P{n:03d}" for n in range(1, 61)]
+
+
+def test_the_data_card_facts_match_the_catalog(catalog):
+    card = (ROOT / "docs" / "data_card.md").read_text(encoding="utf-8")
+    assert f"`{catalog.sha256[:12]}" in card
+    assert "| Records | 60" in card
+    brands = Counter(p.brand for p in catalog.products)
+    for brand, n in brands.items():
+        assert f"{brand} ({n})" in card, brand
+    assert f"{sum(p.in_stock for p in catalog.products)} in stock" in card
+    assert f"{sum(not p.in_stock for p in catalog.products)} out of stock" in card
+    assert f"{sum(p.gpu_type == 'integrated' for p in catalog.products)} integrated" in card
+    assert f"{sum(p.gpu_type == 'dedicated' for p in catalog.products)} dedicated" in card
+    for field, label in (
+        ("ram_gb", "ram_gb"),
+        ("storage_gb", "storage_gb"),
+        ("weight_kg", "weight_kg"),
+        ("gpu_type", "gpu_type"),
+    ):
+        missing = [p.product_id for p in catalog.products if getattr(p, field) is None]
+        row = next(
+            line
+            for line in card.splitlines()
+            if line.startswith(f"| `{label}` | ") and "product" in line
+        )
+        for pid in missing:
+            assert pid in row, (field, pid)
