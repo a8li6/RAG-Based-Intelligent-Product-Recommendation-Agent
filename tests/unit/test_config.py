@@ -26,7 +26,7 @@ def test_defaults_are_valid():
 def test_paths_resolve_from_project_root_not_cwd(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     s = load_settings()
-    assert s.catalog_path == PROJECT_ROOT / "data/sample/products.jsonl"
+    assert s.catalog_path == PROJECT_ROOT / "data/demo/products.jsonl"
     assert s.catalog_path.is_file()
     assert s.artifact_dir.is_absolute()
 

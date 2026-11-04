@@ -20,8 +20,8 @@ class Settings(BaseSettings):
         env_file=PROJECT_ROOT / ".env", extra="ignore", case_sensitive=False
     )
 
-    catalog_path: Path = Path("data/sample/products.jsonl")
-    artifact_dir: Path = Path("artifacts/catalog-v1")
+    catalog_path: Path = Path("data/demo/products.jsonl")
+    artifact_dir: Path = Path("artifacts/demo-v1")
     # "builtin" is fully offline (no model download, no service). "e5" is optional and needs the
     # `neural` extra plus a one-time model download.
     embedding_backend: Literal["builtin", "e5"] = "builtin"
