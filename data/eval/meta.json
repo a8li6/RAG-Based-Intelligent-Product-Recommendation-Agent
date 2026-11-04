@@ -1,0 +1,13 @@
+{
+  "catalog_file": "data/demo/products.jsonl",
+  "catalog_sha256": "42a7c29e4095b075de4c0677d36e559644762c84226cee1d12933c0b089c990a",
+  "grades": "2 = strong, 1 = partial, 0 = irrelevant (omitted from relevance)",
+  "labeling": "Rule-based over catalog tags and specifications, defined in scripts/build_eval_set.py independently of any retriever. Single author; no second human review.",
+  "query_count": 60,
+  "split_policy": "Whole paraphrase groups stay in one split. Test labels are frozen before tuning.",
+  "splits": {
+    "dev": 20,
+    "test": 40
+  },
+  "test_labels_sha256": "483dd2d0b5df4bc6aec8d8527eb7761fc467d3122cef2db034ffc6785a3161c7"
+}

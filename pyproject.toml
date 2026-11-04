@@ -39,3 +39,7 @@ filterwarnings = [
 [tool.ruff]
 line-length = 100
 src = ["src", "tests"]
+
+[tool.ruff.lint.per-file-ignores]
+# Data-authoring scripts keep their input tables as dict(...) calls for readability.
+"scripts/*" = ["C408"]
