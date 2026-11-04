@@ -31,10 +31,24 @@ without evidence.
 | README, screenshots, architecture, data card, code and data licensing and limitations are present; synthetic data and snapshot prices are labeled | verified | `README.md`, `docs/images/`, `docs/architecture.md`, `docs/data_card.md`, `LICENSE`, `DATA_LICENSE.md` |
 | No secrets, virtual environments, private records or model weights are tracked | verified | repository scan before release: 83 tracked files, about 1 MB, none of the forbidden types, no secret-like strings (the only match is a test sentinel) |
 | Repository identity and visibility are intentional | **needs your confirmation** | the repository is currently **public**; the maintainer should confirm that is intended |
-| The repository contains the tested release and its CI result; a release tag and short release notes identify the scope | verified | tag `v0.1.0` and `docs/release_notes_v0.1.0.md` (a GitHub Release page was not created: it needs credentials this environment does not have) |
+| The repository contains the tested release and its CI result; a release tag and short release notes identify the scope | partial | CI passed on GitHub for every commit up to the release commit, and `docs/release_notes_v0.1.0.md` identifies the scope. The tag `v0.1.0` and a GitHub Release page were **not created**: pushing a tag from the build environment was rejected with HTTP 403 (branch pushes work). See "Publishing the tag" below |
 
 ## What this release deliberately is not
 
 - Not evidence of accuracy on real shoppers, real catalogs, neural embeddings or a language model.
 - Not a deployed service: it binds to a local interface and has no authentication or rate limiting design.
 - Not statistically validated: 30 positive held-out queries, no confidence intervals, one author.
+
+## Publishing the tag
+
+Tag pushes are blocked in the environment this project was built in, so the owner creates the tag
+once, on the commit whose CI run is green (the latest commit on `main` at the time of release):
+
+```bash
+git fetch origin && git checkout main && git pull
+git tag -a v0.1.0 -m "v0.1.0: first complete version (see docs/release_notes_v0.1.0.md)"
+git push origin v0.1.0
+```
+
+Or in the GitHub web interface: Releases, "Draft a new release", create the tag `v0.1.0` targeting
+`main`, and paste the contents of `docs/release_notes_v0.1.0.md` as the description.

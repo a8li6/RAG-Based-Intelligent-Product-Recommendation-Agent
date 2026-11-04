@@ -166,7 +166,9 @@ development split only. Raw reports in `reports/`, generated analysis in `docs/e
 
 **M6 (publication).** CI with pinned actions (run on GitHub: success), a single `scripts/check.sh`,
 architecture document with enforced boundary rules, README whose quick start was executed verbatim
-in a fresh clone, data card, acceptance checklist, portfolio notes, release notes, tag `v0.1.0`.
+in a fresh clone, data card, acceptance checklist, portfolio notes and release notes. The release
+tag `v0.1.0` was **not** pushed: tag pushes returned HTTP 403 from the build environment, so the
+owner must create it (commands in `docs/acceptance_checklist.md`).
 
 **Defects found by tests during this session (all fixed, with regression tests)**
 - "no more than $900" and "no more than 1.5 kg" were parsed as minimum values.
@@ -194,4 +196,5 @@ one), so it is off by default. Findings and limits: `docs/evaluation.md`.
   on a fresh held-out set.
 - Improve the built-in embedder (field-aware weighting, negation) and re-measure on a fresh held-out set.
 - A real, licensed catalog; a native Persian evaluation track; more categories.
+- Create the `v0.1.0` tag / GitHub Release (blocked in the build environment).
 - Confirm repository visibility (currently public).
