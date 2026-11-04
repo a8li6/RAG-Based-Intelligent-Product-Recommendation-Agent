@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     explanation_mode: Literal["llm", "deterministic"] = "deterministic"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     max_query_chars: int = Field(default=2000, ge=1, le=10_000)
+    max_request_bytes: int = Field(default=16_384, ge=1_024, le=1_048_576)
+    max_concurrent_requests: int = Field(default=4, ge=1, le=64)
+    # Build the index at startup only when the artifact directory does not exist yet. A
+    # corrupt or mismatched artifact set is never rebuilt silently.
+    auto_build_index: bool = True
 
     @field_validator("llm_base_url")
     @classmethod

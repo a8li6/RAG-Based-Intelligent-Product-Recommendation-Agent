@@ -30,6 +30,11 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = ["slow: tests needing a real embedding model or local LLM"]
+filterwarnings = [
+    # Upstream notice from starlette's TestClient about httpx; not an issue in this project.
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated:DeprecationWarning",
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated:Warning",
+]
 
 [tool.ruff]
 line-length = 100
