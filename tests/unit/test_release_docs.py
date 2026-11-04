@@ -39,7 +39,7 @@ def test_the_tag_is_not_claimed_as_done_while_it_is_not_on_the_remote():
     row = next(
         line for line in ACCEPT.splitlines() if "release tag and short release notes" in line
     )
-    assert "| partial |" in row and "not created" in row
+    assert "| partial |" in row and "could not be created" in row
     assert "Publishing the tag" in ACCEPT and "git push origin v0.1.0" in ACCEPT
     progress = (ROOT / "docs" / "progress.md").read_text(encoding="utf-8")
     assert "was **not** pushed" in progress

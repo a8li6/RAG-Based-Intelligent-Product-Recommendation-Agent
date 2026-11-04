@@ -31,7 +31,16 @@ without evidence.
 | README, screenshots, architecture, data card, code and data licensing and limitations are present; synthetic data and snapshot prices are labeled | verified | `README.md`, `docs/images/`, `docs/architecture.md`, `docs/data_card.md`, `LICENSE`, `DATA_LICENSE.md` |
 | No secrets, virtual environments, private records or model weights are tracked | verified | repository scan before release: 83 tracked files, about 1 MB, none of the forbidden types, no secret-like strings (the only match is a test sentinel) |
 | Repository identity and visibility are intentional | **needs your confirmation** | the repository is currently **public**; the maintainer should confirm that is intended |
-| The repository contains the tested release and its CI result; a release tag and short release notes identify the scope | partial | CI passed on GitHub for every commit up to the release commit, and `docs/release_notes_v0.1.0.md` identifies the scope. The tag `v0.1.0` and a GitHub Release page were **not created**: pushing a tag from the build environment was rejected with HTTP 403 (branch pushes work). See "Publishing the tag" below |
+| The repository contains the tested release and its CI result; a release tag and short release notes identify the scope | partial | CI passed on GitHub for every commit up to the release commit, and `docs/release_notes_v0.1.0.md` identifies the scope. The tag `v0.1.0` (and later `v0.2.0` for the Persian prototype) and a GitHub Release page could not be created from the build environment: pushing a tag from the build environment was rejected with HTTP 403 (branch pushes work). See "Publishing the tag" below |
+
+## Persian track (post-v0.1.0)
+
+| Item | Status | Evidence |
+|---|---|---|
+| Persian constraints are enforced and toman is asked about | verified | `reports/fa/` (0 of 96 violations, 33 of 33 readings correct, against 22 of 120 before), `tests/unit/test_query_fa.py` |
+| English results unchanged by the Persian work | verified | regression test comparing a fresh run with the published report |
+| Persian query texts reviewed by a native speaker | **not done** | `docs/fa_review_sheet.md` is ready for a reviewer; until then this is a prototype |
+| Persian responses | **not done** | out of scope: responses are English |
 
 ## What this release deliberately is not
 
