@@ -36,9 +36,8 @@ class RecommenderClient:
     def _send(self, method: str, path: str, **kwargs) -> httpx.Response:
         try:
             if self._http is not None:
-                return self._http.request(
-                    method, self.base_url + path, timeout=self.timeout, **kwargs
-                )
+                # An injected client owns its own timeout configuration.
+                return self._http.request(method, self.base_url + path, **kwargs)
             with httpx.Client(timeout=self.timeout) as http:
                 return http.request(method, self.base_url + path, **kwargs)
         except httpx.TimeoutException as exc:
@@ -68,6 +67,11 @@ class RecommenderClient:
                     "bad_response", "The service returned an unexpected response."
                 ) from exc
         raise _error_for(response)
+
+
+def make_client(base_url: str = DEFAULT_BASE_URL) -> RecommenderClient:
+    """Factory the UI uses; tests replace it to point the UI at an in-process API."""
+    return RecommenderClient(base_url)
 
 
 def _error_for(response: httpx.Response) -> ClientError:
