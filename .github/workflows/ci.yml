@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only: the workflow never writes to the repository and uses no secrets.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Actions are pinned to full commit SHAs (the version is in the trailing comment).
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+
+      - name: Install the tested requirements
+        run: python -m pip install -r requirements-lock.txt
+
+      - name: Install the project without re-resolving dependencies
+        run: python -m pip install --no-deps -e .
+
+      # Runs: pip check, ruff, format check, data validation (including a case that must fail),
+      # the deterministic tests, and an evaluation smoke test. No model download, no LLM, no network.
+      - name: Quality gates
+        run: bash scripts/check.sh
